@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "nom": "Estela",
+    "cognom":"Mena Lopez",
+    "rol": "treballador",
+    "pin": "1234",
+    "foto": "./images/Estela.jpg",
+    "empresa_id":1,
+    "administrador":false,
+    "dni":""
+  },
+  {
+    "id": 2,
+    "nom": "Jaume",
+    "rol": "treballador",
+    "cognom":"Tutusaus Perez",
+    "pin": "2345",
+    "foto": "./images/Jaume.jpg",
+    "empresa_id":1,
+    "administrador":false,
+    "dni":""
+  },
+  {
+    "id": 3,
+    "nom": "Paula",
+    "cognom":"Padró Riba",
+    "rol": "treballador",
+    "pin": "3456",
+    "foto":"./images/Paula.jpg",
+    "empresa_id":1,
+    "administrador":true,
+    "dni":""
+  },
+   {
+    "id": 4,
+    "nom": "JaumeT",
+    "cognom":"Tarrida Borras",
+    "rol": "SuperAdministrador",
+    "pin": "9999",
+    "foto":"",
+    "empresa_id":2,
+    "administrador":true,
+    "dni":""
+  }
+]

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tropic · Fitxatges amb FullCalendar</title>
+  <link href="styles.css" rel="stylesheet" />
+  <!-- Bootstrap CSS (opcional, per estilitzar millor) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    #disminuir {
+      display: none;
+    }
+
+    body {
+      padding: 2rem;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #dde0e7;
+
+      height: 100vh;
+
+      background-color: #f7f7f7;
+    }
+
+    #calendar {
+      max-width: 1200px;
+      margin: auto;
+      background: rgb(243, 239, 239);
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="mb-4">
+    <div id="ver-botones" class="d-flex align-items-center justify-content-between">
+      <h1><i id="activar-sonido" class="bi bi-volume-up-fill "></i></h1>
+
+      <img id="img" src="./images/IMG-20250612-WA0000.jpg" alt="Logo">
+     <img id="icono" class="icono" src="./icons/icon-512.png" alt="Icon">
+
+      <h4 class="m-0 text-center flex-grow-1">Fitxatges <div id="rellotge" class="text-muted mb-3"></div>
+      </h4>
+
+      <button class="btn btn-primary ms-3" title="activar-conexion" id="activar-conexion"> <i
+          class="bi bi-arrow-clockwise">Clic aquí per iniciar !!!</i></button>
+      <button class="btn btn-primary ms-3" title="disminuir" id="disminuir" onclick="disminuirCalendari()"> > <
+          </button>
+          <button class="btn btn-primary ms-3" title="ampliar" id="ampliar" onclick="ampliarCalendari()">
+            <>
+          </button>
+          <button id="entrar-administracio" class="btn btn-primary ms-3">Veure Administració</button>
+          <h1><i id="activar-sonido2" class="bi bi-wifi "></i></h1>
+    </div>
+  </header>
+  <div class="container-fluid" id="container-fluid">
+    <div class="row row-md-8" id="panellCalendar">
+      <div class="col-md-8" id="panellEsquerra">
+        <div id="adminPanel" title="admin">
+          <div class="btn-group mb-3">
+
+            <button class="btn btn-outline-primary" onclick="mostrarInforme('actual')">Mes actual</button>
+            <button class="btn btn-outline-secondary" onclick="mostrarInforme('anterior')">Mes anterior</button>
+          </div>
+          <div id="taulaAssistencia" class="mb-4"></div>
+        </div>
+        <div id="calendar" class="col-md-12"></div>
+      </div>
+      <!-- 📦 Panell lateral (1/3 dreta) -->
+      <div class="col-md-4" id="panellLateral">
+
+        <h5 id="panellDeFitxatge">Panell de fitxatge</h5>
+  
+       <div id="card-reader">
+         <i id="icons" class="bi bi-clock clock"></i>
+         <div id="clock" class="digital-clock" >00:00</div> <!-- Reloj nuevo -->
+         <i class="bi bi-wifi wifi-icon"></i> <!-- Icono WiFi centrado -->
+
+    <div class="reader-light"></div> 
+    
+    <div id="card">
+      <img src="./images/ma.png"  alt="Ma">
+      <div id="tipusCard">Targeta Entrada</div>
+      <div id="nomCard">Jaume Tarrida Borras</div>
+      <div id="tropicCard">Tropic Black</div>
+      <img id="fotoCard" src="./images/Paula.jpg" alt="">
+    </div>
+   
+        
+  </div>
+
+
+
+        <div id="feedback-info" class="text-success text-center fw-bold mb-3">Info</div>
+        <div id="taulaFitxatges" class="mt-3"></div>
+        <div id="fitxatgeManual" class="mt-4">
+          <h3>Important !!! Llegir al final de la pàgina</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <iframe id="visorPDF" title="visorPDF"></iframe>
+  <!-- Scripts -->
+  <audio id="miSonido" src="./sounds/trabar-carro-alarma-auto-.mp3"></audio>
+  <audio id="miAudio" src="./sounds/perro.mp3"></audio>
+  <div class="modal fade" id="detallEvent" tabindex="-1" aria-labelledby="titolModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form class="modal-body">
+          <h5 class="modal-title mb-3" id="titolModal">Modificació de Fitxatge</h5>
+
+          <div class="row mb-3">
+            <label for="modalId" class="col-sm-3 col-form-label">Id</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalId" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalUsuari" class="col-sm-3 col-form-label">Nom</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalUsuari" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalAccio" class="col-sm-3 col-form-label">Acció</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalAccio" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalData" class="col-sm-3 col-form-label">Dia</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalData" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalHoraCompleta" class="col-sm-3 col-form-label">Hora Nova</label>
+            <div class="col-sm-9">
+              <input type="time" class="form-control" id="modalHoraCompleta" />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalMotiu" class="col-sm-3 col-form-label">Motiu</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalMotiu" placeholder="Escriu el Motiu del fitxatge" />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalAdministradorNom" class="col-sm-3 col-form-label">Correcció per:</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalAdministradorNom" value="Administrador" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalPassword" class="col-sm-3 col-form-label">Contrasenya</label>
+            <div class="col-sm-9">
+              <input type="password" class="form-control" id="modalPassword" />
+            </div>
+          </div>
+        </form>
+        <div id="feedback" class="text-success text-center fw-semibold mb-2">
+          ✅ Canvis guardats correctament
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger">Eliminar</button>
+          <button type="button" class="btn btn-success">Modificar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tancar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-8 flex-column">
+    <h1 class="bg-body">✅ Recordeu-vos de fitxar</h1><br>
+    <h2>Aquest programa realitza les operacions marcades amb [x]</h2><br>
+    <h2>✅ CONTROL LEGAL I TÈCNIC</h2>
+    <h3>[x] Sistema digital de registre actiu (PC, tauleta o <strong>TPV</strong>)</h3>
+
+    <h3>[x] Els fitxatges inclouen nom, data, hora i tipus (entrada/sortida)</h3>
+
+    <h3>[x] Els registres són únics i no duplicats</h3>
+
+    <h3>[x] (En procès) Les dades es deserán en una base persistent com PostgreSQL, ara a <strong>indexedBD</strong>
+    </h3>
+
+    <h3>[x] L'accés a la base de dades està protegit per usuari tècnic amb control d'escriptura</h3>
+
+    <h3>[x] S’utilitza un PIN privat per validar cada fitxatge manualment</h3><br>
+
+    <h2>📁 GESTIÓ DE DADES I CONSERVACIÓ</h2>
+    <h3>[ ] (En Obres) Els registres es conserven durant un mínim de 4 anys</h3>
+    <h4>[x] Ara els registres es guarden al navegador, aixó no es segur doncs es poden perdre les dades</h4>
+    <h3>[x] Les dades es poden exportar a CSV o PDF en qualsevol moment</h3>
+
+    <h3>[x] Es guarda un historial de modificacions si s’edita algun fitxatge</h3><br>
+
+    <h2>🛡️ COMPLIMENT DE LA INSPECCIÓ DE TREBALL</h2>
+    <h3>[x] Es poden consultar fitxatges del personal en qualsevol moment</h3>
+
+    <h3>[x] L’aplicació pot generar informes mensuals en PDF i CSV</h3>
+
+    <h3>[ ] Si hi ha representants laborals, es disposa d'accés o informes per ells</h3>
+
+    <h3>[ ] El sistema registra torns dividits i absències voluntàries o justificades</h3><br>
+
+    <h2>🌐 DISPONIBILITAT I ACCÉS</h2>
+    <h3>[x] L’aplicació funciona des de qualsevol navegador modern</h3>
+
+    <h3>[x] Es pot accedir amb connexió a GitHub Pages o similars</h3>
+
+    <h3>[x] El sistema pot funcionar en tauletes o TPVs amb navegador</h3>
+
+    <h3>[ ] (Opcional) Funcionalitat offline amb sincronització posterior</h3><br>
+    <!--links per informacio-->
+    <h2>Nova Normativa BOE 2025</h2><br>
+    <h3>🛡️Detalls del nou registre digital obligatori</h3><br>
+    <h4>Com funcionarà el registre digital de l’horari laboral</h4>
+    <h4>El nou registre digital de l’horari laboral, introduït com a part de l’esborrany preliminar de la llei laboral
+      de 2025, té com a objectiu modernitzar i optimitzar la gestió del temps en les empreses. Aquest sistema digital
+      substituirà el registre de paper, proporcionant un mètode més precís, segur i eficient per documentar les hores
+      treballades.</h4><br>
+
+    <h3>🛡️Accessibilitat i automatització dels treballadors</h3><br>
+    <h4>El registre digital serà accessible per a tots els treballadors, que puguin registrar la seva jornada laboral de
+      manera senzilla i ràpida a través de dispositius electrònics com ordinadors, tauletes o telèfons mòbils.
+
+      Aquesta automatització no només facilitarà el procés de signatura diari, sinó que també permetrà una gestió més
+      eficient del temps de treball. Els treballadors podran veure i gestionar les seves hores treballades, sol·licitar
+      correccions i accedir a la seva història de registre en qualsevol moment, cosa que garanteix una major
+      transparència i control personal sobre la seva jornada laboral.</h4><br>
+    <h3>🛡️Accés remot per a la inspecció del treball i
+      de la Seguretat Social</h3><br>
+    <h4>Una de les característiques més innovadores del nou sistema de registre digital és la capacitat de permetre
+      l’accés
+      remot per a la inspecció del treball i la seguretat social. Això significa que els inspectors poden revisar els
+      registres de l’horari laboral sense necessitat d’estar presents físicament a les instal·lacions de l’empresa.
+      Aquest
+      accés remot accelerarà els processos d’inspecció i auditoria, permetent una supervisió més eficient reduint les
+      interrupcions en les operacions diàries de les empreses. A més, garanteix que les dades es revisin de manera
+      puntual
+      i precisa, millorant la capacitat de detectar possibles incompliments.</h4><br>
+
+    <h3>🛡️Conservació de registres durant quatre anys</h3><br>
+    <h4>Un altre aspecte crucial del nou sistema és l’obligació de conservar els registres digitals durant un
+      període de quatre anys. Aquesta mesura garanteix que la informació està disponible per a revisions futures, tant
+      per
+      la inspecció laboral com pels treballadors i els seus representants sindicals. La conservació d’aquests registres
+      és
+      essencial per garantir la transparència i la rendició de comptes al llarg del temps. Les empreses han de garantir
+      que els seus sistemes d’emmagatzematge siguin segurs i fiables, protegint les dades contra pèrdues, alteracions o
+      accessos no autoritzats.</h4><br>
+    <div class="container mt-8 flex-column">
+      <h2>📚 Més informació</h2>
+      <p>Per a més detalls sobre la normativa i els requisits legals, pots consultar els següents enllaços:</p>
+      <ul>
+        <li><a href="https://factorial.es/blog/nueva-ley-fichaje-digital-obligatorio-jornada-laboral-38-horas/"
+            target="_blank" rel="noopener">Factorial</a></li>
+
+
+      </ul>
+    </div>
+    <div class="container mt-8 flex-column">
+      <h2>📜 Llicència i crèdits</h2>
+      <p>© 2025 JTB per Tropic. Tots els drets reservats.</p>
+    </div>
+  </div>
+  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ca.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <script src="script.js" defer></script>
+</body>
+
+</html>
