@@ -1086,6 +1086,16 @@ if(motiu){
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('/tropic_fitxatges/sw.js')
+      .then(() => {
+        console.log('✔️ Service Worker registrat correctament');
+      })
+      .catch((error) => {
+        console.error('❌ Error registrant el Service Worker:', error);
+      });
+  }
   const calendarEl = document.getElementById("calendar");
   calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth",
