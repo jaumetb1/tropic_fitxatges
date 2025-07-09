@@ -1,11 +1,11 @@
-const CACHE_NAME = 'tropic-cache-v1';
+const CACHE_NAME = 'tropic-cache-v1.1';
 const FILES_TO_CACHE = [
   '/tropic_fitxatges/index.html',
   '/tropic_fitxatges/manifest.json',
   '/tropic_fitxatges/icons/icon-192.png',
   '/tropic_fitxatges/icons/icon-512.png',
   '/tropic_fitxatges/styles.css',        // canvia segons el teu projecte
-  '/tropic_fitxatges/script.js',        // idem
+  '/tropic_fitxatges/main.js',        // idem
   // afegeix aquí qualsevol altre fitxer JS, CSS o imatges que vulguis cachejar
 ];
 
@@ -33,6 +33,7 @@ self.addEventListener('activate', (event) => {
     })
   );
 });
+
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(

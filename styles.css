@@ -1,3 +1,4 @@
+
 #calendar {
   background-color: rgb(194, 190, 190);
   padding: 1rem;
@@ -5,14 +6,17 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   max-height: 80vh; /* o el que millor et vagi */
   overflow-y: auto;
-}
-#calendar {
+
   overflow-x: auto;
-  overflow-y: auto;
+
   max-height: 80vh;
+  visibility: visible;
+  display:block;
 }
+#errorLogin{display:none;}
+.input-inici{max-width: 250px;}
 #panellLateral {
-  background-color: #f8f9fa;
+  background-color: rgb(243, 239, 239);
   padding: 1rem;
   border-radius: 8px;
   height: 100%;
@@ -26,7 +30,7 @@
   background-color: rgba(0, 123, 255, 0.15) !important;
 }
 #fitxatgeManual {
-  max-height: 50vh;
+  max-height: 70vh;
   overflow-y: auto;
   background-color: #e0e5eb;
   border: 1px solid #ddd;
@@ -37,7 +41,11 @@
   border-left: 4px solid #0d6efd;
 }
 #taulaFitxatges {
-  border-left: 4px solid #0d6efd;
+  border-left: 2px solid #0d6efd;
+  max-height: 50vh;
+
+overflow-y: auto;
+
 }
 #fitxatgeManual h6 {
   font-weight: bold;
@@ -50,9 +58,12 @@
 #panellLateral {
   padding-bottom: 4rem;
   border-left: 4px solid #0d6efd;
+
 }
 #adminPanel {
   border-radius: 5px;
+  display:none;
+  background-color:#0d6efd;
 }
 #img {
   width: 200px;
@@ -65,20 +76,35 @@
 }
 #ver-botones {
   display: none;
+
+  
+
+  padding: 0;
+  margin: 0;
+  
+  align-items: center; /* Centra verticalment si és flex */
+  height: auto; /* Permet que l'alçada s'ajusti */
+
+  top: 0; /* Es queda enganxat a la part superior de la pantalla */
+
 }
+
 #entrar-administracio,
 #activar-sonido,
 #feedback,
 #feedback-info {
   display: none;
 }
+#feedback-info {
+  background-color:rgb(79,76,76);
+color:white;}
 #activar-sonido,
 #activar-sonido2 {
   color: rgb(93, 60, 215);
   gap: 5px;
 }
 #activar-conexion {
-  font-size: 3rem; /* fa gran tant el text com la icona */
+  font-size: 0.5rem; /* fa gran tant el text com la icona */
   padding: 1rem 1.5rem;
   border-radius: 10px;
   color: chartreuse;
@@ -126,7 +152,9 @@
 /* Feedback amb transició suau */
 #feedback,
 #feedback-info {
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 1s ease-in-out;
+   border-radius: 10px;
+   
 }
 /* Estilo para eventos */
 .fc-event {
@@ -269,9 +297,9 @@
   height: 250px;
   background: #4f4343;
   border-radius: 10px;
-  position: relative;
+  position:relative;
   margin: 20px auto;
-  display: none;
+  display: block;
   overflow: hidden;
   background: #423b3b;
   border-radius: 10px;
@@ -310,12 +338,12 @@
   height:40px;
 
 }
+
 /* Reloj digital */
 .digital-clock,
-.clock {
+.clock,.reader-avui{
   position: absolute;
-  top: 210px;
-  left: 40px;
+ 
   color: white;
   font-family: "Arial", sans-serif;
   font-size: 21px;
@@ -324,10 +352,17 @@
   border-radius: 0px;
   z-index: 1;
 }
-.clock {
-  left: 10px;
+.digital-clock{
+  top:190px;
+  left:40px;
 }
-
+.clock {
+  top: 190px;
+  left:10px;
+}
+.reader-avui{
+  top:215px;
+  left:10px;}
 /* Animación para la mano (mismos tiempos que la tarjeta) */
 @keyframes swipe-hand {
   0% {
@@ -372,4 +407,65 @@
 .icono{
   width:70px;
   height: 70px;
+}
+.modal-body {
+  max-width: 600px !important;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-content{
+  max-width: 600px !important;
+  max-height: 90vh;
+
+}
+body{
+   padding: 2rem;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #dde0e7;
+
+      height: 100vh;
+
+      background-color: #c3acac;
+}
+input[type="time"],span[type="time"]{
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  background-color: #def6dd;
+  width: auto;
+}
+.span-com-input {
+  display: inline-block;
+  font-size: 1.2rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  background-color: #f2f2f2;
+  width: auto;
+  text-align: center;
+  color: #333;
+}
+
+#activar-sonido,#img,#icono,#empresa_operativa,#usuariActiu,#activar-conexion,#activa-sonido{
+   padding: 0;
+  margin: 0;
+  top:0px;
+  line-height: 1; /* Evita espais verticals addicionals */
+}
+.bi-alarm,.bi-volume-up-fill,.bi-wifi,.bi-clock{
+padding-left: 5px;padding-right: 5px;
+  font-size: 2rem; color: cornflowerblue;
+
+}
+.bi-box-arrow-in-right,.bi-box-arrow-right{
+  font-size: 1.5rem; color: rgb(141, 186, 194);
+}
+.clock{
+  font-size: 1.5em;
+  color:rgb(174, 221, 182);
+}
+.fondo_div_fitxatge{
+  background-color:#eae6e6;
 }

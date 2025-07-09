@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="ca">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tropic · Fitxatges amb FullCalendar</title>
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="manifest" href="/tropic_fitxatges/manifest.json" />
+  <!--<link rel="manifest" href="/tropic_fitxatges/manifest.json" />-->
 
-  <link href="styles.css" rel="stylesheet" />
+
   <!-- Bootstrap CSS (opcional, per estilitzar millor) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -16,20 +17,20 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">-->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+  <link href="styles.css" rel="stylesheet" />
   <style>
     #disminuir {
       display: none;
     }
 
     body {
-      padding: 2rem;
+      padding: 0rem;
       font-family: "Segoe UI", sans-serif;
       background-color: #dde0e7;
 
       height: 100vh;
 
-      background-color: #f7f7f7;
+      
     }
 
     #calendar {
@@ -44,152 +45,85 @@
 </head>
 
 <body>
-  <header class="mb-4">
+  <div id="loginScreen"
+    class="position-fixed top-0 start-0 w-100 h-100 bg-light d-flex flex-column justify-content-center align-items-center">
+
+    <h3 class="mb-3">🔐 Accés restringit</h3>
+    <label for="email">E-Mail</label>
+    <input type="email" id="emailInput" placeholder="Correu electrònic" class="form-control mb-2 input-inici" />
+    <label for="contrasenya">Contrasenya</label>
+    <input type="password" id="passwordInput" placeholder="Contrasenya" class="form-control mb-3 input-inici" />
+    <!-- sense onclick -->
+    <button id="loginBtn" type="button" class="btn btn-primary">Entrar</button>
+    <p id="errorLogin" class="text-danger mt-2"></p>
+
+  </div>
+
+  <header>
     <div id="ver-botones" class="d-flex align-items-center justify-content-between">
-      <h1><i id="activar-sonido" class="bi bi-volume-up-fill "></i></h1>
+
 
       <img id="img" src="./images/IMG-20250612-WA0000.jpg" alt="Logo">
-     <img id="icono" class="icono" src="./icons/icon-512.png" alt="Icon">
+      <img id="icono" class="icono" src="./icons/icon-512.png" alt="Icon">
 
-      <h4 class="m-0 text-center flex-grow-1">Fitxatges <div id="rellotge" class="text-muted mb-3"></div>
-      </h4>
+      <h4 id="empresa_operativa" class="m-0 text-center flex-grow-1">Fitxatges</h4>
+      <h4 id="rellotge" class="m-0 text-center flex-grow-1"></h4>
 
-      <button class="btn btn-primary ms-3" title="activar-conexion" id="activar-conexion"> <i
+      <div id="usuariActiu" class="ms-auto me-3 text-muted small"></div>
+
+      <button type="button" class="btn btn-primary ms-3" title="activar-conexion" id="activar-conexion"> <i
           class="bi bi-arrow-clockwise">Clic aquí per iniciar !!!</i></button>
-      <button class="btn btn-primary ms-3" title="disminuir" id="disminuir" onclick="disminuirCalendari()"> > <
+      <!--<button class="btn btn-primary ms-3" title="disminuir" id="disminuir" onclick="disminuirCalendari()"> > <
           </button>
           <button class="btn btn-primary ms-3" title="ampliar" id="ampliar" onclick="ampliarCalendari()">
             <>
-          </button>
-          <button id="entrar-administracio" class="btn btn-primary ms-3">Veure Administració</button>
-          <h1><i id="activar-sonido2" class="bi bi-wifi "></i></h1>
+          </button>-->
+      <button type="button" id="entrar-administracio" class="btn btn-primary ms-3">Veure Administració</button>
+      <div id="alarma-entrada"><i class="bi bi-box-arrow-in-right"></i><i class="bi bi-alarm"></i></div>
+      <div id="alarma-sortida"><i class="bi bi-box-arrow-right"></i><i class="bi bi-alarm"></i></div>
+      <div id="activa-sonido"><i class="bi bi-wifi "></i></div>
+      <div id="activa-sonido2"><i class="bi bi-volume-up-fill "></i></div>
+      <button type="button" id="btnTancarSessio" class="btn btn-primary ms-3"> ❌ Tancar Sessió</button>
     </div>
   </header>
+
   <div class="container-fluid" id="container-fluid">
     <div class="row row-md-8" id="panellCalendar">
       <div class="col-md-8" id="panellEsquerra">
         <div id="adminPanel" title="admin">
           <div class="btn-group mb-3">
 
-            <button class="btn btn-outline-primary" onclick="mostrarInforme('actual')">Mes actual</button>
-            <button class="btn btn-outline-secondary" onclick="mostrarInforme('anterior')">Mes anterior</button>
+            <button id="btnActual" class="btn btn-primary">Mes actual</button>
+            <button id="btnAnterior" class="btn btn-secondary">Mes anterior</button>
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <select id="selectorMes" title="sel" class="form-select form-select-sm w-auto">
+                <option value="0">Gener</option>
+                <option value="1">Febrer</option>
+                <option value="2">Març</option>
+                <option value="3">Abril</option>
+                <option value="4">Maig</option>
+                <option value="5">Juny</option>
+                <option value="6">Juliol</option>
+                <option value="7">Agost</option>
+                <option value="8">Setembre</option>
+                <option value="9">Octubre</option>
+                <option value="10">Novembre</option>
+                <option value="11">Desembre</option>
+              </select>
+
+              <select id="selectorAny" title="sel" class="form-select form-select-sm w-auto">
+                <!-- S’omple dinàmicament -->
+              </select>
+
+              <button id="btnMostrarInforme" class="btn btn-primary btn-sm">📊 Mostra informe</button>
+            </div>
           </div>
           <div id="taulaAssistencia" class="mb-4"></div>
+          <div id="vistaSetmanal"></div>
+
         </div>
         <div id="calendar" class="col-md-12"></div>
-      </div>
-      <!-- 📦 Panell lateral (1/3 dreta) -->
-      <div class="col-md-4" id="panellLateral">
-
-        <h5 id="panellDeFitxatge">Panell de fitxatge</h5>
-  
-       <div id="card-reader">
-         <i id="icons" class="bi bi-clock clock"></i>
-         <div id="clock" class="digital-clock" >00:00</div> <!-- Reloj nuevo -->
-         <i class="bi bi-wifi wifi-icon"></i> <!-- Icono WiFi centrado -->
-
-    <div class="reader-light"></div> 
-    
-    <div id="card">
-      <img src="./images/ma.png"  alt="Ma">
-      <div id="tipusCard">Targeta Entrada</div>
-      <div id="nomCard">Jaume Tarrida Borras</div>
-      <div id="tropicCard">Tropic Black</div>
-      <img id="fotoCard" src="./images/Paula.jpg" alt="">
-    </div>
-   
-        
-  </div>
-
-
-
-        <div id="feedback-info" class="text-success text-center fw-bold mb-3">Info</div>
-        <div id="taulaFitxatges" class="mt-3"></div>
-        <div id="fitxatgeManual" class="mt-4">
-          <h3>Important !!! Llegir al final de la pàgina</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-  <iframe id="visorPDF" title="visorPDF"></iframe>
-  <!-- Scripts -->
-  <audio id="miSonido" src="./sounds/trabar-carro-alarma-auto-.mp3"></audio>
-  <audio id="miAudio" src="./sounds/perro.mp3"></audio>
-  <div class="modal fade" id="detallEvent" tabindex="-1" aria-labelledby="titolModal" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <form class="modal-body">
-          <h5 class="modal-title mb-3" id="titolModal">Modificació de Fitxatge</h5>
-
-          <div class="row mb-3">
-            <label for="modalId" class="col-sm-3 col-form-label">Id</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="modalId" readonly />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="modalUsuari" class="col-sm-3 col-form-label">Nom</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="modalUsuari" readonly />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="modalAccio" class="col-sm-3 col-form-label">Acció</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="modalAccio" readonly />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="modalData" class="col-sm-3 col-form-label">Dia</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="modalData" readonly />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="modalHoraCompleta" class="col-sm-3 col-form-label">Hora Nova</label>
-            <div class="col-sm-9">
-              <input type="time" class="form-control" id="modalHoraCompleta" />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="modalMotiu" class="col-sm-3 col-form-label">Motiu</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="modalMotiu" placeholder="Escriu el Motiu del fitxatge" />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="modalAdministradorNom" class="col-sm-3 col-form-label">Correcció per:</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="modalAdministradorNom" value="Administrador" readonly />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="modalPassword" class="col-sm-3 col-form-label">Contrasenya</label>
-            <div class="col-sm-9">
-              <input type="password" class="form-control" id="modalPassword" />
-            </div>
-          </div>
-        </form>
-        <div id="feedback" class="text-success text-center fw-semibold mb-2">
-          ✅ Canvis guardats correctament
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger">Eliminar</button>
-          <button type="button" class="btn btn-success">Modificar</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tancar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container mt-8 flex-column">
+        <div class="container mt-8 flex-column">
     <h1 class="bg-body">✅ Recordeu-vos de fitxar</h1><br>
     <h2>Aquest programa realitza les operacions marcades amb [x]</h2><br>
     <h2>✅ CONTROL LEGAL I TÈCNIC</h2>
@@ -197,17 +131,20 @@
 
     <h3>[x] Els fitxatges inclouen nom, data, hora i tipus (entrada/sortida)</h3>
 
+    <h3>[x] Els fitxatges poden ser Modificats per el Administrador explicant Motiu</h3>
+
+
     <h3>[x] Els registres són únics i no duplicats</h3>
 
-    <h3>[x] (En procès) Les dades es deserán en una base persistent com PostgreSQL, ara a <strong>indexedBD</strong>
+    <h3>[x] Les dades es guarden en una base de dades persistent PostgreSQL de Supabase
     </h3>
 
     <h3>[x] L'accés a la base de dades està protegit per usuari tècnic amb control d'escriptura</h3>
 
-    <h3>[x] S’utilitza un PIN privat per validar cada fitxatge manualment</h3><br>
+    <h3>[x] S’utilitza un PIN Administrador privat per validar cada fitxatge manualment </h3><br>
 
     <h2>📁 GESTIÓ DE DADES I CONSERVACIÓ</h2>
-    <h3>[ ] (En Obres) Els registres es conserven durant un mínim de 4 anys</h3>
+    <h3>[X] Els registres es conserven durant un mínim de 4 anys</h3>
     <h4>[x] Ara els registres es guarden al navegador, aixó no es segur doncs es poden perdre les dades</h4>
     <h3>[x] Les dades es poden exportar a CSV o PDF en qualsevol moment</h3>
 
@@ -216,11 +153,11 @@
     <h2>🛡️ COMPLIMENT DE LA INSPECCIÓ DE TREBALL</h2>
     <h3>[x] Es poden consultar fitxatges del personal en qualsevol moment</h3>
 
-    <h3>[x] L’aplicació pot generar informes mensuals en PDF i CSV</h3>
+    <h3>[x] L’aplicació genera informes mensuals en PDF i CSV</h3>
 
-    <h3>[ ] Si hi ha representants laborals, es disposa d'accés o informes per ells</h3>
+    <h3>[x] Si hi ha representants laborals, es disposa d'accés o informes per ells</h3>
 
-    <h3>[ ] El sistema registra torns dividits i absències voluntàries o justificades</h3><br>
+    <h3>[x] El sistema registra absències Temporals voluntàries o justificades</h3><br>
 
     <h2>🌐 DISPONIBILITAT I ACCÉS</h2>
     <h3>[x] L’aplicació funciona des de qualsevol navegador modern</h3>
@@ -282,6 +219,166 @@
       <h2>📜 Llicència i crèdits</h2>
       <p>© 2025 JTB per Tropic. Tots els drets reservats.</p>
     </div>
+    <iframe id="visorPDF" title="visorPDF"></iframe>
+  </div>
+      </div>
+      <!-- 📦 Panell lateral (1/3 dreta) -->
+      <div class="col-md-4" id="panellLateral">
+        <div id="card-reader">
+          <div id="feedback-info" class="text-success text-center fw-bold mb-3">Info</div>
+          <i id="icons" class="bi bi-clock clock"></i>
+          <div id="clock" class="digital-clock">00:00</div> <!-- Reloj nuevo -->
+          <i class="bi bi-wifi wifi-icon"></i> <!-- Icono WiFi centrado -->
+          <div id="reader-avui" class="reader-avui">avui</div>
+
+          <div class="reader-light"></div>
+
+          <div id="card">
+            <img src="./images/ma.png" alt="Ma">
+            <div id="tipusCard">Targeta Entrada</div>
+            <div id="nomCard"></div>
+            <div id="tropicCard">Tropic Black</div>
+            <img id="fotoCard" src="./images/IMG-20250612-WA0000.jpg" alt="">
+
+          </div>
+        </div>
+
+        <h5 id="panellDeFitxatge">Panell de fitxatge</h5>
+
+
+
+
+
+
+        <div id="taulaFitxatges" class="mt-3"></div>
+
+
+
+
+
+
+        <h3>Important !!! Llegir al final de la pàgina</h3>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+  <!-- Scripts -->
+  <audio id="miSonido" src="./sounds/trabar-carro-alarma-auto-.mp3"></audio>
+  <audio id="miAudio" src="./sounds/perro.mp3"></audio>
+  <div class="modal fade" id="detallEvent" tabindex="-1" aria-labelledby="titolModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form class="modal-body">
+          <h5 class="modal-title mb-3" id="titolModal">Modificació de Fitxatge</h5>
+
+          <div class="row mb-3">
+            <label for="modalId" class="col-sm-3 col-form-label">Id</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalId" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalUsuari" class="col-sm-3 col-form-label">Nom</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalUsuari" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalAccio" class="col-sm-3 col-form-label">Acció</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalAccio" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalData" class="col-sm-3 col-form-label">Dia</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalData" readonly />
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="modalHoraAnterior" class="col-sm-3 col-form-label">Hora Anterior</label>
+            <div class="col-sm-9">
+              <input type="time" class="form-control" id="modalHoraAnterior" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalHoraCompleta" class="col-sm-3 col-form-label">Hora Nova</label>
+            <div class="col-sm-9">
+              <input type="time" class="form-control" id="modalHoraCompleta" />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalMotiu" class="col-sm-3 col-form-label">Motiu</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalMotiu" placeholder="Escriu el Motiu del fitxatge" />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalAdministradorNom" class="col-sm-3 col-form-label">Correcció per:</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="modalAdministradorNom" value="Administrador" readonly />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="modalPassword" class="col-sm-3 col-form-label">Contrasenya</label>
+            <div class="col-sm-9">
+              <input type="text" inputmode="numeric" autocomplete="off" name="pin-fitxatge"
+                placeholder="🔢 Introdueix el PIN de Administrador" class="form-control form-control-sm my-1"
+                id="modalPassword" />
+            </div>
+          </div>
+        </form>
+        <div id="feedback" class="text-success text-center fw-semibold mb-2">
+          ✅ Canvis guardats correctament
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-modal-danger" class="btn btn-danger">Eliminar</button>
+          <button type="button" id="btn-modal-success" class="btn btn-success">Modificar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tancar</button>
+        </div>
+        <div id="logModificacions" class="mt-3 small">Aqui van les modificacions</div>
+      </div>
+    </div>
+  </div>
+  <!--<div class="my-3">
+  <label for="csvInput">📂 Importa fitxatges (.csv):</label>
+  <input type="file" id="csvInput" accept=".csv" class="form-control form-control-sm" />
+</div>-->
+  <div class="modal fade" id="modalEdicioFitxatge" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content p-3">
+        <h5 id="edicioFitxatgeTitol"></h5>
+        <input type="time" placeholder="-" id="edicioFitxatgeHora" class="form-control mb-2" />
+        <input type="password" id="edicioFitxatgePin" placeholder="🔢 Pin Admin" class="form-control mb-2" />
+        <button id="btnConfirmarEdicio" class="btn btn-success w-100">💾 Guardar</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="modalFitxatgeManual" tabindex="-1" aria-labelledby="titolModalManual" aria-hidden="true"
+    data-bs-backdrop="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="titolModalManual">🔐 Fitxatge manual</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tancar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="fitxatgeManual" class="mt-2"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Tancar</button>
+        </div>
+      </div>
+    </div>
   </div>
   <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 
@@ -289,8 +386,11 @@
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ca.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-  <script src="script.js" defer></script>
+  <!--<script src="funcions.js"></script>--->
+  <script type="module" src="main.js"></script>
+
 </body>
 
 </html>
