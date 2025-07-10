@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+
+  <title>Vista TPV Setmanal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding: 2rem; background: #f7f7f7; }
+    .btn-lg { font-size: 1.25rem; }
+    .table th, .table td { vertical-align: middle; text-align: center; }
+  </style>
+</head>
+<body>
+  <div id="tpvSetmana" class="container mt-3">
+    <h4 class="mb-3">📆 Setmana actual</h4>
+    <div id="taulaTPV"></div>
+    <button id="btnExportarTPV" class="btn btn-success btn-lg mt-3">🖨️ Imprimir informe</button>
+  </div>
+
+  <script type="module">
+    import html2canvas from "https://cdn.skypack.dev/html2canvas";
+    import jsPDF from "https://cdn.skypack.dev/jspdf";
+
+    function formatDateLocal(date) {
+      const any = date.getFullYear();
+      const mes = String(date.getMonth() + 1).padStart(2, "0");
+      const dia = String(date.getDate()).padStart(2, "0");
+      return `${any}-${mes}-${dia}`;
+    }
+
+    function exportarTPVPdf() {
+      const element = document.getElementById("tpvSetmana");
+      html2canvas(element).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("setmana_actual.pdf");
+      });
+    }
+
+    document.getElementById("btnExportarTPV").addEventListener("click", exportarTPVPdf);
+
+    function mostrarSetmanaActualTPV(fitxatges) {
+      const cont = document.getElementById("taulaTPV");
+      cont.innerHTML = "";
+
+      const avui = new Date();
+      const diaAvui = avui.getDay();
+      const inici = new Date(avui);
+      inici.setDate(avui.getDate() - (diaAvui === 0 ? 6 : diaAvui - 1));
+      const fi = new Date(inici);
+      fi.setDate(inici.getDate() + 6);
+
+      const setmanaDates = [];
+      for (let d = new Date(inici); d <= fi; d.setDate(d.getDate() + 1)) {
+        setmanaDates.push(formatDateLocal(new Date(d)));
+      }
+
+      const agrupats = {};
+      fitxatges.forEach(f => {
+        agrupats[f.data] ||= {};
+        agrupats[f.data][f.tipus] = f.hora;
+      });
+
+      let html = `<table class="table table-bordered table-sm"><thead>
+        <tr><th>Dia</th><th>Entrada</th><th>Sortida</th><th>Hores</th><th>Estat</th></tr></thead><tbody>`;
+
+      let totalMinuts = 0;
+
+      setmanaDates.forEach(data => {
+        const entrada = agrupats[data]?.entrada || "--:--";
+        const sortida = agrupats[data]?.sortida || "--:--";
+        let hores = "--:--";
+        let estat = "❌";
+
+        if (entrada !== "--:--" && sortida !== "--:--") {
+          const [he, me] = entrada.split(":").map(Number);
+          const [hs, ms] = sortida.split(":").map(Number);
+          let diff = hs * 60 + ms - (he * 60 + me);
+          if (diff < 0) diff += 1440;
+          hores = `${String(Math.floor(diff / 60)).padStart(2, "0")}:${String(diff % 60).padStart(2, "0")}`;
+          estat = "✅";
+          totalMinuts += diff;
+        } else if (entrada !== "--:--" || sortida !== "--:--") {
+          estat = "⚠️";
+        }
+
+        html += `<tr>
+          <td>${data}</td>
+          <td>${entrada}</td>
+          <td>${sortida}</td>
+          <td>${hores}</td>
+          <td>${estat}</td>
+        </tr>`;
+      });
+
+      html += `</tbody><tfoot><tr class="table-success">
+        <td colspan="3"><strong>Total hores setmana</strong></td>
+        <td colspan="2"><strong>${String(Math.floor(totalMinuts / 60)).padStart(2, "0")}:${String(totalMinuts % 60).padStart(2, "0")}</strong></td>
+      </tr></tfoot></table>`;
+
+      cont.innerHTML = html;
+    }
+
+    // 🔁 Exemple de dades simulades
+    const fitxatgesExemple = [
+      { data: "2025-07-01", tipus: "entrada", hora: "08:00" },
+      { data: "2025-07-01", tipus: "sortida", hora: "12:00" },
+      { data: "2025-07-03", tipus: "entrada", hora: "09:00" },
+      { data: "2025-07-03", tipus: "sortida", hora: "13:00" },
+      // pots afegir més...
+    ];
+
+    mostrarSetmanaActualTPV(fitxatgesExemple);
+  </script>
+</body>
+</html>

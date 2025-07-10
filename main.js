@@ -13,8 +13,6 @@ window.addEventListener("click", (event) => {
     modal.style.display = "none";
   }
 });
-
-
 function ampliarCalendari() {
   document.getElementById("panellLateral").classList.remove("col-md-4");
   document.getElementById("panellLateral").classList.add("col-md-2");
@@ -2743,7 +2741,7 @@ function iniciarContadorSessio() {
 
     if (segonsRestants <= 0) {
       document.getElementById("loginScreen").style.visibility="visible";
-      
+
       document.getElementById("container-fluid").style.visibility="hidden";
       clearInterval(intervalSessio);
       mostrarModalSessio();
