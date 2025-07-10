@@ -13,6 +13,15 @@ window.addEventListener("click", (event) => {
     modal.style.display = "none";
   }
 });
+
+function actualitzarNumeroCercle(valor1,valor2) {
+  const icona = document.getElementById("cercle-contador-entrada");
+  icona.className = `bi bi-${valor1}-circle`;
+   const icona1 = document.getElementById("cercle-contador-sortida");
+  icona1.className = `bi bi-${valor2}-circle`;
+}
+
+
 function ampliarCalendari() {
   document.getElementById("panellLateral").classList.remove("col-md-4");
   document.getElementById("panellLateral").classList.add("col-md-2");
@@ -2454,8 +2463,21 @@ async function actualitzarHora() {
   const sortidaFitxatges = fitxatgesDia.filter((f) => f.sortida === true);
 const minutsValids = [45,50,55,56,57,58,59];
 const segonsValids = [0, 30];
-entradaFitxatges.length<nf?document.getElementById("alarma-entrada").style.display="block":document.getElementById("alarma-entrada").style.display="none";
-sortidaFitxatges.length<nf?document.getElementById("alarma-sortida").style.display="block":document.getElementById("alarma-sortida").style.display="none";
+if(entradaFitxatges.length<nf){
+  document.getElementById("icona-reloj-entrada").style.display="block";
+
+}else{
+  document.getElementById("icona-reloj-entrada").style.display="none";
+
+}
+if(sortidaFitxatges.length<nf){
+  document.getElementById("icona-reloj-sortida").style.display="block";
+
+}else{
+  document.getElementById("icona-reloj-sortida").style.display="none";
+
+}
+
   if (
     entradaFitxatges.length < nf &&
     hours === 7 &&
@@ -2463,7 +2485,7 @@ sortidaFitxatges.length<nf?document.getElementById("alarma-sortida").style.displ
     segonsValids.includes(seconds)
   ) {
       //console.log(entradaFitxatges);
-    
+  
     const texto="🔔 Hora de Fitxar Entrada ! 🔔 Alarma Conectada Falten "+(nf-entradaFitxatges.length)+ " Fitxatges Entrada";
     mostrar_feedback_info(texto,"alarma",6000)
   }
@@ -2510,7 +2532,7 @@ sortidaFitxatges.length<nf?document.getElementById("alarma-sortida").style.displ
           6000
         );
       }
-    
+      actualitzarNumeroCercle(entradaFitxatges.length,sortidaFitxatges.length);
   }
 
 // Función mejorada para iniciar temporizadores

@@ -454,7 +454,7 @@ input[type="time"],span[type="time"]{
   top:0px;
   line-height: 1; /* Evita espais verticals addicionals */
 }
-.bi-alarm,.bi-volume-up-fill,.bi-wifi,.bi-clock{
+.bi-volume-up-fill,.bi-wifi,.bi-clock{
 padding-left: 5px;padding-right: 5px;
   font-size: 2rem; color: cornflowerblue;
 
@@ -470,3 +470,27 @@ padding-left: 5px;padding-right: 5px;
   background-color:#eae6e6;
 }
 #modalSessio{display:none;}
+
+
+#alarma-entrada,#alarma-sortida{
+  position:absolute;
+  display:flex;
+}
+#alarma-entrada{
+  top:100px;
+  left:20px;
+}
+#alarma-sortida{
+  top:140px;
+  left:20px;
+}
+#cercle-contador-entrada,#cercle-contador-sortida{
+  color:blue;
+  font-size: 24px;
+  display:block;
+}
+#icona-reloj-entrada,#icona-reloj-sortida{
+  display:block;
+  color:yellow;
+  font-size: 30px;
+}

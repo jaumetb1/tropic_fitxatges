@@ -30,7 +30,7 @@
 
       height: 100vh;
 
-      
+
     }
 
     #calendar {
@@ -70,7 +70,7 @@
       <h4 id="rellotge" class="m-0 text-center flex-grow-1"></h4>
 
       <div id="usuariActiu" class="ms-auto me-3 text-muted small"></div>
-<button id="botoSessio" type="button" class="btn btn-secondary ms-3">Sessió: 60:00</button>
+      <button id="botoSessio" type="button" class="btn btn-secondary ms-3">Sessió: 60:00</button>
       <button type="button" class="btn btn-primary ms-3" title="activar-conexion" id="activar-conexion"> <i
           class="bi bi-arrow-clockwise">Clic aquí per iniciar !!!</i></button>
       <!--<button class="btn btn-primary ms-3" title="disminuir" id="disminuir" onclick="disminuirCalendari()"> > <
@@ -79,8 +79,7 @@
             <>
           </button>-->
       <button type="button" id="entrar-administracio" class="btn btn-primary ms-3">Veure Administració</button>
-      <div id="alarma-entrada"><i class="bi bi-box-arrow-in-right"></i><i class="bi bi-alarm"></i></div>
-      <div id="alarma-sortida"><i class="bi bi-box-arrow-right"></i><i class="bi bi-alarm"></i></div>
+
       <div id="activa-sonido"><i class="bi bi-wifi "></i></div>
       <div id="activa-sonido2"><i class="bi bi-volume-up-fill "></i></div>
       <button type="button" id="btnTancarSessio" class="btn btn-primary ms-3"> ❌ Tancar Sessió</button>
@@ -124,103 +123,117 @@
         </div>
         <div id="calendar" class="col-md-12"></div>
         <div class="container mt-8 flex-column">
-    <h1 class="bg-body">✅ Recordeu-vos de fitxar</h1><br>
-    <h2>Aquest programa realitza les operacions marcades amb [x]</h2><br>
-    <h2>✅ CONTROL LEGAL I TÈCNIC</h2>
-    <h3>[x] Sistema digital de registre actiu (PC, tauleta o <strong>TPV</strong>)</h3>
+          <h1 class="bg-body">✅ Recordeu-vos de fitxar</h1><br>
+          <h2>Aquest programa realitza les operacions marcades amb [x]</h2><br>
+          <h2>✅ CONTROL LEGAL I TÈCNIC</h2>
+          <h3>[x] Sistema digital de registre actiu (PC, tauleta o <strong>TPV</strong>)</h3>
 
-    <h3>[x] Els fitxatges inclouen nom, data, hora i tipus (entrada/sortida)</h3>
+          <h3>[x] Els fitxatges inclouen nom, data, hora i tipus (entrada/sortida)</h3>
 
-    <h3>[x] Els fitxatges poden ser Modificats per el Administrador explicant Motiu</h3>
-
-
-    <h3>[x] Els registres són únics i no duplicats</h3>
-
-    <h3>[x] Les dades es guarden en una base de dades persistent PostgreSQL de Supabase
-    </h3>
-
-    <h3>[x] L'accés a la base de dades està protegit per usuari tècnic amb control d'escriptura</h3>
-
-    <h3>[x] S’utilitza un PIN Administrador privat per validar cada fitxatge manualment </h3><br>
-
-    <h2>📁 GESTIÓ DE DADES I CONSERVACIÓ</h2>
-    <h3>[X] Els registres es conserven durant un mínim de 4 anys</h3>
-    <h4>[x] Ara els registres es guarden al navegador, aixó no es segur doncs es poden perdre les dades</h4>
-    <h3>[x] Les dades es poden exportar a CSV o PDF en qualsevol moment</h3>
-
-    <h3>[x] Es guarda un historial de modificacions si s’edita algun fitxatge</h3><br>
-
-    <h2>🛡️ COMPLIMENT DE LA INSPECCIÓ DE TREBALL</h2>
-    <h3>[x] Es poden consultar fitxatges del personal en qualsevol moment</h3>
-
-    <h3>[x] L’aplicació genera informes mensuals en PDF i CSV</h3>
-
-    <h3>[x] Si hi ha representants laborals, es disposa d'accés o informes per ells</h3>
-
-    <h3>[x] El sistema registra absències Temporals voluntàries o justificades</h3><br>
-
-    <h2>🌐 DISPONIBILITAT I ACCÉS</h2>
-    <h3>[x] L’aplicació funciona des de qualsevol navegador modern</h3>
-
-    <h3>[x] Es pot accedir amb connexió a GitHub Pages o similars</h3>
-
-    <h3>[x] El sistema pot funcionar en tauletes o TPVs amb navegador</h3>
-
-    <h3>[ ] (Opcional) Funcionalitat offline amb sincronització posterior</h3><br>
-    <!--links per informacio-->
-    <h2>Nova Normativa BOE 2025</h2><br>
-    <h3>🛡️Detalls del nou registre digital obligatori</h3><br>
-    <h4>Com funcionarà el registre digital de l’horari laboral</h4>
-    <h4>El nou registre digital de l’horari laboral, introduït com a part de l’esborrany preliminar de la llei laboral
-      de 2025, té com a objectiu modernitzar i optimitzar la gestió del temps en les empreses. Aquest sistema digital
-      substituirà el registre de paper, proporcionant un mètode més precís, segur i eficient per documentar les hores
-      treballades.</h4><br>
-
-    <h3>🛡️Accessibilitat i automatització dels treballadors</h3><br>
-    <h4>El registre digital serà accessible per a tots els treballadors, que puguin registrar la seva jornada laboral de
-      manera senzilla i ràpida a través de dispositius electrònics com ordinadors, tauletes o telèfons mòbils.
-
-      Aquesta automatització no només facilitarà el procés de signatura diari, sinó que també permetrà una gestió més
-      eficient del temps de treball. Els treballadors podran veure i gestionar les seves hores treballades, sol·licitar
-      correccions i accedir a la seva història de registre en qualsevol moment, cosa que garanteix una major
-      transparència i control personal sobre la seva jornada laboral.</h4><br>
-    <h3>🛡️Accés remot per a la inspecció del treball i
-      de la Seguretat Social</h3><br>
-    <h4>Una de les característiques més innovadores del nou sistema de registre digital és la capacitat de permetre
-      l’accés
-      remot per a la inspecció del treball i la seguretat social. Això significa que els inspectors poden revisar els
-      registres de l’horari laboral sense necessitat d’estar presents físicament a les instal·lacions de l’empresa.
-      Aquest
-      accés remot accelerarà els processos d’inspecció i auditoria, permetent una supervisió més eficient reduint les
-      interrupcions en les operacions diàries de les empreses. A més, garanteix que les dades es revisin de manera
-      puntual
-      i precisa, millorant la capacitat de detectar possibles incompliments.</h4><br>
-
-    <h3>🛡️Conservació de registres durant quatre anys</h3><br>
-    <h4>Un altre aspecte crucial del nou sistema és l’obligació de conservar els registres digitals durant un
-      període de quatre anys. Aquesta mesura garanteix que la informació està disponible per a revisions futures, tant
-      per
-      la inspecció laboral com pels treballadors i els seus representants sindicals. La conservació d’aquests registres
-      és
-      essencial per garantir la transparència i la rendició de comptes al llarg del temps. Les empreses han de garantir
-      que els seus sistemes d’emmagatzematge siguin segurs i fiables, protegint les dades contra pèrdues, alteracions o
-      accessos no autoritzats.</h4><br>
-    <div class="container mt-8 flex-column">
-      <h2>📚 Més informació</h2>
-      <p>Per a més detalls sobre la normativa i els requisits legals, pots consultar els següents enllaços:</p>
-      <ul>
-        <li><a href="https://factorial.es/blog/nueva-ley-fichaje-digital-obligatorio-jornada-laboral-38-horas/"
-            target="_blank" rel="noopener">Factorial</a></li>
+          <h3>[x] Els fitxatges poden ser Modificats per el Administrador explicant Motiu</h3>
 
 
-      </ul>
-    </div>
-    <div class="container mt-8 flex-column">
-      <h2>📜 Llicència i crèdits</h2>
-      <p>© 2025 JTB per Tropic. Tots els drets reservats.</p>
-    </div>
-    <iframe id="visorPDF" title="visorPDF"></iframe>
-  </div>
+          <h3>[x] Els registres són únics i no duplicats</h3>
+
+          <h3>[x] Les dades es guarden en una base de dades persistent PostgreSQL de Supabase
+          </h3>
+
+          <h3>[x] L'accés a la base de dades està protegit per usuari tècnic amb control d'escriptura</h3>
+
+          <h3>[x] S’utilitza un PIN Administrador privat per validar cada fitxatge manualment </h3><br>
+
+          <h2>📁 GESTIÓ DE DADES I CONSERVACIÓ</h2>
+          <h3>[X] Els registres es conserven durant un mínim de 4 anys</h3>
+          <h4>[x] Ara els registres es guarden al navegador, aixó no es segur doncs es poden perdre les dades</h4>
+          <h3>[x] Les dades es poden exportar a CSV o PDF en qualsevol moment</h3>
+
+          <h3>[x] Es guarda un historial de modificacions si s’edita algun fitxatge</h3><br>
+
+          <h2>🛡️ COMPLIMENT DE LA INSPECCIÓ DE TREBALL</h2>
+          <h3>[x] Es poden consultar fitxatges del personal en qualsevol moment</h3>
+
+          <h3>[x] L’aplicació genera informes mensuals en PDF i CSV</h3>
+
+          <h3>[x] Si hi ha representants laborals, es disposa d'accés o informes per ells</h3>
+
+          <h3>[x] El sistema registra absències Temporals voluntàries o justificades</h3><br>
+
+          <h2>🌐 DISPONIBILITAT I ACCÉS</h2>
+          <h3>[x] L’aplicació funciona des de qualsevol navegador modern</h3>
+
+          <h3>[x] Es pot accedir amb connexió a GitHub Pages o similars</h3>
+
+          <h3>[x] El sistema pot funcionar en tauletes o TPVs amb navegador</h3>
+
+          <h3>[ ] (Opcional) Funcionalitat offline amb sincronització posterior</h3><br>
+          <!--links per informacio-->
+          <h2>Nova Normativa BOE 2025</h2><br>
+          <h3>🛡️Detalls del nou registre digital obligatori</h3><br>
+          <h4>Com funcionarà el registre digital de l’horari laboral</h4>
+          <h4>El nou registre digital de l’horari laboral, introduït com a part de l’esborrany preliminar de la llei
+            laboral
+            de 2025, té com a objectiu modernitzar i optimitzar la gestió del temps en les empreses. Aquest sistema
+            digital
+            substituirà el registre de paper, proporcionant un mètode més precís, segur i eficient per documentar les
+            hores
+            treballades.</h4><br>
+
+          <h3>🛡️Accessibilitat i automatització dels treballadors</h3><br>
+          <h4>El registre digital serà accessible per a tots els treballadors, que puguin registrar la seva jornada
+            laboral de
+            manera senzilla i ràpida a través de dispositius electrònics com ordinadors, tauletes o telèfons mòbils.
+
+            Aquesta automatització no només facilitarà el procés de signatura diari, sinó que també permetrà una gestió
+            més
+            eficient del temps de treball. Els treballadors podran veure i gestionar les seves hores treballades,
+            sol·licitar
+            correccions i accedir a la seva història de registre en qualsevol moment, cosa que garanteix una major
+            transparència i control personal sobre la seva jornada laboral.</h4><br>
+          <h3>🛡️Accés remot per a la inspecció del treball i
+            de la Seguretat Social</h3><br>
+          <h4>Una de les característiques més innovadores del nou sistema de registre digital és la capacitat de
+            permetre
+            l’accés
+            remot per a la inspecció del treball i la seguretat social. Això significa que els inspectors poden revisar
+            els
+            registres de l’horari laboral sense necessitat d’estar presents físicament a les instal·lacions de
+            l’empresa.
+            Aquest
+            accés remot accelerarà els processos d’inspecció i auditoria, permetent una supervisió més eficient reduint
+            les
+            interrupcions en les operacions diàries de les empreses. A més, garanteix que les dades es revisin de manera
+            puntual
+            i precisa, millorant la capacitat de detectar possibles incompliments.</h4><br>
+
+          <h3>🛡️Conservació de registres durant quatre anys</h3><br>
+          <h4>Un altre aspecte crucial del nou sistema és l’obligació de conservar els registres digitals durant un
+            període de quatre anys. Aquesta mesura garanteix que la informació està disponible per a revisions futures,
+            tant
+            per
+            la inspecció laboral com pels treballadors i els seus representants sindicals. La conservació d’aquests
+            registres
+            és
+            essencial per garantir la transparència i la rendició de comptes al llarg del temps. Les empreses han de
+            garantir
+            que els seus sistemes d’emmagatzematge siguin segurs i fiables, protegint les dades contra pèrdues,
+            alteracions o
+            accessos no autoritzats.</h4><br>
+          <div class="container mt-8 flex-column">
+            <h2>📚 Més informació</h2>
+            <p>Per a més detalls sobre la normativa i els requisits legals, pots consultar els següents enllaços:</p>
+            <ul>
+              <li><a href="https://factorial.es/blog/nueva-ley-fichaje-digital-obligatorio-jornada-laboral-38-horas/"
+                  target="_blank" rel="noopener">Factorial</a></li>
+
+
+            </ul>
+          </div>
+          <div class="container mt-8 flex-column">
+            <h2>📜 Llicència i crèdits</h2>
+            <p>© 2025 JTB per Tropic. Tots els drets reservats.</p>
+          </div>
+          <iframe id="visorPDF" title="visorPDF"></iframe>
+        </div>
       </div>
       <!-- 📦 Panell lateral (1/3 dreta) -->
       <div class="col-md-4" id="panellLateral">
@@ -232,7 +245,17 @@
           <div id="reader-avui" class="reader-avui">avui</div>
 
           <div class="reader-light"></div>
+          <div id="alarma-entrada">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <i id="cercle-contador-entrada" class="bi bi-5-circle"></i>
+            <i id="icona-reloj-entrada" class="bi bi-alarm"></i>
+          </div>
 
+          <div id="alarma-sortida">
+            <i class="bi bi-box-arrow-right"></i>
+            <i id="cercle-contador-sortida" class="bi bi-5-circle"></i>
+            <i id="icona-reloj-sortida" class="bi bi-alarm"></i>
+          </div>
           <div id="card">
             <img src="./images/ma.png" alt="Ma">
             <div id="tipusCard">Targeta Entrada</div>
@@ -262,7 +285,7 @@
     </div>
   </div>
   </div>
-  
+
   <!-- Scripts -->
   <audio id="miSonido" src="./sounds/trabar-carro-alarma-auto-.mp3"></audio>
   <audio id="miAudio" src="./sounds/perro.mp3"></audio>
@@ -352,11 +375,11 @@
   <label for="csvInput">📂 Importa fitxatges (.csv):</label>
   <input type="file" id="csvInput" accept=".csv" class="form-control form-control-sm" />
 </div>-->
-<div id="modalSessio" class="modal" >
-  <div class="modal-content">
-    <p>⏳ La sessió ha caducat. Cal reiniciar per obtenir dades actualitzades.</p>
+  <div id="modalSessio" class="modal">
+    <div class="modal-content">
+      <p>⏳ La sessió ha caducat. Cal reiniciar per obtenir dades actualitzades.</p>
+    </div>
   </div>
-</div>
   <div class="modal fade" id="modalEdicioFitxatge" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content p-3">
@@ -367,7 +390,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="modal fade" id="modalFitxatgeManual" tabindex="-1" aria-labelledby="titolModalManual" aria-hidden="true"
     data-bs-backdrop="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
