@@ -1,9 +1,20 @@
+let segonsRestants = 3600; // 60 minuts
+let intervalSessio;
 function crearSpanHora(text) {
   const span = document.createElement("span");
   span.className = "span-com-input me-2";
   span.textContent = text || "--:--";
   return span;
 }
+// 👆 Tancar el modal tocant fora
+window.addEventListener("click", (event) => {
+  const modal = document.getElementById("modalSessio");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+
 function ampliarCalendari() {
   document.getElementById("panellLateral").classList.remove("col-md-4");
   document.getElementById("panellLateral").classList.add("col-md-2");
@@ -221,7 +232,7 @@ async function registrarEntradaDesprésTemporal(nom, dataStr) {
       "valid"
     );
     actualitzarPanell(dataStr);
-    await reproducirSonido();
+    reproducirSonido();
   }
   if (nou) {
     mostrar_feedback_info(
@@ -260,7 +271,7 @@ async function registrarSortidaTemporal(nom, dataStr) {
       "valid"
     );
     actualitzarPanell(dataStr);
-    await reproducirSonido();
+    reproducirSonido();
   }
 }
 // Variable global mejorada para temporizadores
@@ -1148,6 +1159,7 @@ document.querySelector(".btn-danger").addEventListener("click", () => {
 //console.log("📦 El fitxer main.js s’ha carregat");
 
 document.addEventListener("DOMContentLoaded", async () => {
+
   document
     .getElementById("btnActual")
     ?.addEventListener("click", () => mostrarInforme("actual"));
@@ -1164,6 +1176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     console.warn("❌ No s'ha trobat el botó loginBtn al DOM");
   }
+  
   //supabase.auth.getSession().then(({ data: { session } }) => {
  //  if (session) {
   //    console.log("Estas autenticat");
@@ -1267,6 +1280,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       actualitzarPanell(info.dateStr);
     },
+     
   });
   //await carregaUsers();
 
@@ -1285,6 +1299,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   actualitzarHora();
   setInterval(actualitzarHora, 1000);
   inicialitzarSelectorsInforme();
+
 });
 
 async function mostrarInformePersonalitzat(mesIndex, any) {
@@ -2192,11 +2207,14 @@ document
     document.getElementById("ver-botones").style.display = "block";
     document.getElementById("entrar-administracio").style.display = "block";
     document.getElementById("activar-sonido").style.display = "block";
-    await reproducirSonidoValor("whatsapp-apple.mp3");
+    reproducirSonidoValor("whatsapp-apple.mp3");
+
+  
   });
 // ✅ Recomanat
 window.addEventListener("beforeunload", function (e) {
   e.preventDefault();
+ 
   e.returnValue = ""; // Encara cal per mostrar el diàleg en alguns navegadors
 });
 
@@ -2216,6 +2234,7 @@ async function iniciarSessio() {
     errorMsg.style.display = "block";
   } else {
     // Accés concedit!
+    
     document.getElementById("loginScreen").style.visibility = "hidden";
     const sessio = await supabase.auth.getSession();
     const email = sessio.data.session?.user.email || "—";
@@ -2224,7 +2243,10 @@ async function iniciarSessio() {
     document.getElementById(
       "usuariActiu"
     ).innerHTML = `👤 <strong>${email}</strong>`;
+   segonsRestants=3600;
+   iniciarContadorSessio();
     document.getElementById("activar-conexion").click();
+  
   }
 }
 async function tancarSessio() {
@@ -2300,14 +2322,14 @@ function convertirDataAISO(dataInput) {
 }
 
 //document.getElementById("adminPanel").style.display = "none";
-async function reproducirSonido() {
+function reproducirSonido() {
   document.getElementById("miSonido").src =
     "./sounds/trabar-carro-alarma-auto-.mp3";
   const audio = document.getElementById("miSonido");
 
   audio.play();
 }
-async function reproducirSonidoValor(valor) {
+function reproducirSonidoValor(valor) {
   document.getElementById("miSonido").src = "./sounds/" + valor;
   const audio = document.getElementById("miSonido");
 
@@ -2706,4 +2728,38 @@ function redondearCuartoDeHora(tipo, horaStr) {
   ).padStart(2, "0")}`;
 }
 
-//console.log("Id_EMPRESA : ", ID_EMPRESA);
+// ⏳ Actualitzar el text del botó cada segon
+function actualitzarTextBoto() {
+  const min = String(Math.floor(segonsRestants / 60)).padStart(2, "0");
+  const sec = String(segonsRestants % 60).padStart(2, "0");
+  document.getElementById("botoSessio").textContent = `La Sessió expira en ${min}:${sec}`;
+}
+// 🕒 Iniciar el comptador
+function iniciarContadorSessio() {
+  actualitzarTextBoto();
+
+  intervalSessio = setInterval(() => {
+    segonsRestants--;
+
+    if (segonsRestants <= 0) {
+      document.getElementById("loginScreen").style.visibility="visible";
+      
+      document.getElementById("container-fluid").style.visibility="hidden";
+      clearInterval(intervalSessio);
+      mostrarModalSessio();
+      const boto = document.getElementById("botoSessio");
+      boto.textContent = "Cal reiniciar";
+      boto.disabled = false;
+    } else {
+      actualitzarTextBoto();
+    }
+  }, 1000);
+}
+
+
+// 🔔 Mostrar el modal
+function mostrarModalSessio() {
+  const modal = document.getElementById("modalSessio");
+  modal.style.display = "block";
+}
+

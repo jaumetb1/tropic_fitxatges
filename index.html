@@ -70,7 +70,7 @@
       <h4 id="rellotge" class="m-0 text-center flex-grow-1"></h4>
 
       <div id="usuariActiu" class="ms-auto me-3 text-muted small"></div>
-
+<button id="botoSessio" type="button" class="btn btn-secondary ms-3">Sessió: 60:00</button>
       <button type="button" class="btn btn-primary ms-3" title="activar-conexion" id="activar-conexion"> <i
           class="bi bi-arrow-clockwise">Clic aquí per iniciar !!!</i></button>
       <!--<button class="btn btn-primary ms-3" title="disminuir" id="disminuir" onclick="disminuirCalendari()"> > <
@@ -352,6 +352,11 @@
   <label for="csvInput">📂 Importa fitxatges (.csv):</label>
   <input type="file" id="csvInput" accept=".csv" class="form-control form-control-sm" />
 </div>-->
+<div id="modalSessio" class="modal" >
+  <div class="modal-content">
+    <p>⏳ La sessió ha caducat. Cal reiniciar per obtenir dades actualitzades.</p>
+  </div>
+</div>
   <div class="modal fade" id="modalEdicioFitxatge" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content p-3">

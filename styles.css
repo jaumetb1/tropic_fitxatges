@@ -10,7 +10,7 @@
   overflow-x: auto;
 
   max-height: 80vh;
-  visibility: visible;
+ 
   display:block;
 }
 #errorLogin{display:none;}
@@ -469,3 +469,4 @@ padding-left: 5px;padding-right: 5px;
 .fondo_div_fitxatge{
   background-color:#eae6e6;
 }
+#modalSessio{display:none;}
