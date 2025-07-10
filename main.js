@@ -13,6 +13,39 @@ window.addEventListener("click", (event) => {
     modal.style.display = "none";
   }
 });
+async function testSupabaseSessio() {
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession();
+
+    if (error) {
+      console.error("❌ Error al recuperar sessió:", error.message);
+      afegirDebugVisual("❌ Error al recuperar sessió: " + error.message);
+    } else if (session) {
+      console.log("✅ Sessió activa detectada:", session.user.email);
+      afegirDebugVisual("✅ Sessió activa: " + session.user.email);
+    } else {
+      console.warn("🚫 No hi ha sessió activa.");
+      afegirDebugVisual("⚠️ Supabase accessible, però no hi ha sessió iniciada.");
+    }
+  } catch (e) {
+    console.error("🧨 Error general en el test:", e);
+    afegirDebugVisual("❌ Error inesperat. Mira la consola.");
+  }
+}
+
+function afegirDebugVisual(text) {
+  const div = document.createElement("div");
+  div.style.position = "fixed";
+  div.style.bottom = "0";
+  div.style.left = "0";
+  div.style.background = "#222";
+  div.style.color = "#fff";
+  div.style.padding = "10px";
+  div.style.fontSize = "14px";
+  div.style.zIndex = "9999";
+  div.textContent = text;
+  document.body.appendChild(div);
+}
 
 function actualitzarNumeroCercle(valor1,valor2) {
   const icona = document.getElementById("cercle-contador-entrada");
@@ -1306,7 +1339,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   actualitzarHora();
   setInterval(actualitzarHora, 1000);
   inicialitzarSelectorsInforme();
-
+  testSupabaseSessio();
 });
 
 async function mostrarInformePersonalitzat(mesIndex, any) {
@@ -2235,7 +2268,7 @@ async function iniciarSessio() {
     email,
     password,
   });
-
+console.log(data);
   if (error) {
     errorMsg.textContent = "❌ Credencials incorrectes";
     errorMsg.style.display = "block";
@@ -2245,7 +2278,8 @@ async function iniciarSessio() {
     document.getElementById("loginScreen").style.visibility = "hidden";
     const sessio = await supabase.auth.getSession();
     const email = sessio.data.session?.user.email || "—";
-   // console.log(sessio);
+    
+   console.log(sessio);
    // console.log(email);
     document.getElementById(
       "usuariActiu"
