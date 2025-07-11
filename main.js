@@ -13,6 +13,70 @@ window.addEventListener("click", (event) => {
     modal.style.display = "none";
   }
 });
+// 🎛️ Inicialitza el contenidor visual
+function inicialitzarTaulerDebug() {
+  const tauler = document.getElementById("taulerDebug");
+  tauler.style.position = "fixed";
+  tauler.style.bottom = "40px";
+  tauler.style.left = "0";
+  tauler.style.width = "100%";
+  tauler.style.maxHeight = "200px";
+  tauler.style.overflowY = "auto";
+  tauler.style.background = "#111";
+  tauler.style.color = "#0f0";
+  tauler.style.fontFamily = "monospace";
+  tauler.style.fontSize = "13px";
+  tauler.style.padding = "8px";
+  tauler.style.zIndex = "9999";
+  tauler.innerHTML = "<strong>🎛️ Tauler de diagnòstic:</strong><br>";
+}
+
+// ➕ Afegeix línia visual al tauler
+function afegirLiniaTauler(missatge) {
+  const tauler = document.getElementById("taulerDebug");
+  const div = document.createElement("div");
+  div.textContent = "› " + missatge;
+  tauler.appendChild(div);
+  tauler.scrollTop = tauler.scrollHeight;
+}
+
+// 🔄 Alterna visibilitat del tauler
+function toggleTauler() {
+  const tauler = document.getElementById("taulerDebug");
+  const boto = document.getElementById("btnToggleTauler");
+  if (tauler.style.display === "none") {
+    tauler.style.display = "block";
+    boto.textContent = "❌ Tancar tauler";
+  } else {
+    tauler.style.display = "none";
+    boto.textContent = "🔍 Mostrar tauler";
+  }
+}
+
+// 🔍 Dispositiu
+function detectarDispositiu() {
+  const ua = navigator.userAgent;
+  if (/Tablet|iPad/i.test(ua)) return "📲 Tauleta";
+  if (/Mobile|Android|iPhone|iPod/i.test(ua)) return "📱 Mòbil";
+  if (/Windows|Macintosh|Linux/i.test(ua)) return "🖥️ PC o portàtil";
+  return "❓ Tipus desconegut";
+}
+
+// 🌐 Navegador
+function detectarNavegador() {
+  const ua = navigator.userAgent;
+  if (ua.includes("Chrome")) return "🌐 Chrome";
+  if (ua.includes("Firefox")) return "🦊 Firefox";
+  if (ua.includes("Safari") && !ua.includes("Chrome")) return "🍎 Safari";
+  if (ua.includes("Edge")) return "🔷 Edge";
+  return "❓ Navegador desconegut";
+}
+
+// 🧪 Compatibilitat Supabase
+function comprovarCompatibilitatSupabase() {
+  return window.fetch && window.Promise && window.localStorage && window.TextEncoder;
+}
+
 async function testSupabaseSessio() {
   
   try {
@@ -1246,7 +1310,19 @@ function gestionarSessioSupabase() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+inicialitzarTaulerDebug();
 
+  afegirLiniaTauler("🖥️ Dispositiu: " + detectarDispositiu());
+  afegirLiniaTauler("🌐 Navegador: " + detectarNavegador());
+
+  if (comprovarCompatibilitatSupabase()) {
+    afegirLiniaTauler("✅ Compatible amb Supabase");
+  } else {
+    afegirLiniaTauler("❌ No compatible amb Supabase — mode limitat recomanat");
+  }
+
+  // 🧩 Vincular botó a toggleTauler
+  document.getElementById("btnToggleTauler").addEventListener("click", toggleTauler);
   document
     .getElementById("btnActual")
     ?.addEventListener("click", () => mostrarInforme("actual"));
