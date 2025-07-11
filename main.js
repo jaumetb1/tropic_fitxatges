@@ -14,6 +14,7 @@ window.addEventListener("click", (event) => {
   }
 });
 async function testSupabaseSessio() {
+  
   try {
     const { data: { session }, error } = await supabase.auth.getSession();
 
@@ -34,6 +35,7 @@ async function testSupabaseSessio() {
 }
 
 function afegirDebugVisual(text) {
+  alert(text);
   const div = document.createElement("div");
   div.style.position = "fixed";
   div.style.bottom = "0";
@@ -2315,13 +2317,13 @@ async function iniciarSessio() {
     email,
     password,
   });
-console.log(data);
+
   if (error) {
     errorMsg.textContent = "❌ Credencials incorrectes";
     errorMsg.style.display = "block";
   } else {
     // Accés concedit!
-    
+    console.log("🔐 Funció iniciarSessio comensada");
     document.getElementById("loginScreen").style.visibility = "hidden";
     const sessio = await supabase.auth.getSession();
     const email = sessio.data.session?.user.email || "—";
@@ -2333,8 +2335,9 @@ console.log(data);
     ).innerHTML = `👤 <strong>${email}</strong>`;
    segonsRestants=3600;
    iniciarContadorSessio();
+   
     document.getElementById("activar-conexion").click();
-  
+  testSupabaseSessio();
   }
 }
 async function tancarSessio() {
