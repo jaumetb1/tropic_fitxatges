@@ -1196,7 +1196,53 @@ document.querySelector(".btn-danger").addEventListener("click", () => {
   return;
   //aqui cridarem la nova funcio eliminar
 });
+// 🚀 Inicialització de l’aplicació
+function inicialitzarApp(session) {
+  console.log("🔧 Inicialitzant per:", session.user.email);
+  // accions personalitzades...
+}
 //console.log("📦 El fitxer main.js s’ha carregat");
+async function comprovarSessioInicial() {
+  const { data: { session }, error } = await supabase.auth.getSession();
+
+  if (!session || error) {
+    console.warn("🔐 No hi ha sessió activa");
+    mostrarPantallaLogin();
+  } else {
+    console.log("✅ Sessió detectada");
+    iniciarSessio();
+    //inicialitzarApp(session);
+  }
+}
+
+function gestionarSessioSupabase() {
+  supabase.auth.onAuthStateChange((event, session) => {
+    switch (event) {
+      case "SIGNED_IN":
+        console.log("🔓 Sessió iniciada");
+       
+        inicialitzarApp(session);
+        break;
+
+      case "TOKEN_REFRESHED":
+        console.log("🔄 Token renovat en segon pla");
+        inicialitzarApp(session);
+        break;
+
+      case "SIGNED_OUT":
+        console.warn("🔒 Sessió caducada o tancada");
+        mostrarModalSessio(); // modal informatiu
+        document.getElementById("botoSessio").textContent = "Cal reiniciar";
+        document.getElementById("botoSessio").disabled = false;
+        break;
+
+      default:
+        console.log("🔔 Event de sessió:", event);
+    }
+  });
+
+  comprovarSessioInicial(); // primera verificació
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -1340,6 +1386,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setInterval(actualitzarHora, 1000);
   inicialitzarSelectorsInforme();
   testSupabaseSessio();
+  gestionarSessioSupabase();
 });
 
 async function mostrarInformePersonalitzat(mesIndex, any) {
