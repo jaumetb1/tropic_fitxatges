@@ -492,3 +492,6 @@ padding-left: 5px;padding-right: 5px;
   color:yellow;
   font-size: 30px;
 }
+#taulerToggle,#btnToggleTauler{
+  display:block;z-index: "9999";
+}

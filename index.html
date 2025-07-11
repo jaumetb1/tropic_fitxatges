@@ -56,13 +56,8 @@
     <!-- sense onclick -->
     <button id="loginBtn" type="button" class="btn btn-primary">Entrar</button>
     <p id="errorLogin" class="text-danger mt-2"></p>
- <!-- Botó per desplegar / amagar el tauler -->
-  <div id="taulerToggle">
-    <button id="btnToggleTauler">🔍 Mostrar tauler</button>
-  </div>
-
-  <!-- Tauler de diagnòstic -->
-  <div id="taulerDebug"></div>
+    <!-- Botó per desplegar / amagar el tauler -->
+    
   </div>
 
   <header>
@@ -74,7 +69,9 @@
 
       <h4 id="empresa_operativa" class="m-0 text-center flex-grow-1">Fitxatges</h4>
       <h4 id="rellotge" class="m-0 text-center flex-grow-1"></h4>
-
+ <div id="taulerToggle">
+      <button id="btnToggleTauler">🔍 Mostrar tauler</button>
+    </div>
       <div id="usuariActiu" class="ms-auto me-3 text-muted small"></div>
       <button id="botoSessio" type="button" class="btn btn-secondary ms-3">Sessió: 60:00</button>
       <button type="button" class="btn btn-primary ms-3" title="activar-conexion" id="activar-conexion"> <i
@@ -256,14 +253,14 @@
             <i id="icona-reloj-entrada" class="bi bi-alarm"></i>
             <i class="bi bi-box-arrow-in-right"></i>
             <i id="cercle-contador-entrada" class="bi bi-5-circle"></i>
-            
+
           </div>
 
           <div id="alarma-sortida">
-               <i id="icona-reloj-sortida" class="bi bi-alarm"></i>
+            <i id="icona-reloj-sortida" class="bi bi-alarm"></i>
             <i class="bi bi-box-arrow-right"></i>
             <i id="cercle-contador-sortida" class="bi bi-5-circle"></i>
-         
+
           </div>
           <div id="card">
             <img src="./images/ma.png" alt="Ma">
@@ -384,6 +381,7 @@
   <label for="csvInput">📂 Importa fitxatges (.csv):</label>
   <input type="file" id="csvInput" accept=".csv" class="form-control form-control-sm" />
 </div>-->
+
   <div id="modalSessio" class="modal">
     <div class="modal-content">
       <p>⏳ La sessió ha caducat. Cal reiniciar per obtenir dades actualitzades.</p>
@@ -417,6 +415,10 @@
       </div>
     </div>
   </div>
+ 
+
+    <!-- Tauler de diagnòstic -->
+    <div id="taulerDebug"></div>
   <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>

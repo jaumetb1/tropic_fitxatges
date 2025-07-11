@@ -76,7 +76,16 @@ function detectarNavegador() {
 function comprovarCompatibilitatSupabase() {
   return window.fetch && window.Promise && window.localStorage && window.TextEncoder;
 }
+function detectarSistemaOperatiu() {
+  const ua = navigator.userAgent;
 
+  if (ua.includes("Windows")) return "🪟 Windows";
+  if (ua.includes("Macintosh")) return "🍎 macOS";
+  if (ua.includes("Linux")) return "🐧 Linux";
+  if (ua.includes("Android")) return "🤖 Android";
+  if (ua.includes("like Mac")) return "📱 iOS";
+  return "❓ Desconegut";
+}
 async function testSupabaseSessio() {
   
   try {
@@ -1320,6 +1329,7 @@ inicialitzarTaulerDebug();
   } else {
     afegirLiniaTauler("❌ No compatible amb Supabase — mode limitat recomanat");
   }
+afegirLiniaTauler("🧬 Sistema operatiu: " + detectarSistemaOperatiu());
 
   // 🧩 Vincular botó a toggleTauler
   document.getElementById("btnToggleTauler").addEventListener("click", toggleTauler);
