@@ -56,7 +56,6 @@ function actualitzarNumeroCercle(valor1,valor2) {
   icona1.className = `bi bi-${valor2}-circle`;
 }
 
-
 function ampliarCalendari() {
   document.getElementById("panellLateral").classList.remove("col-md-4");
   document.getElementById("panellLateral").classList.add("col-md-2");
@@ -2860,8 +2859,7 @@ function iniciarContadorSessio() {
   }, 1000);
 }
 
-
-// 🔔 Mostrar el modal
+// 🔔 Mostrar el modal de Inici de sessio
 function mostrarModalSessio() {
   const modal = document.getElementById("modalSessio");
   modal.style.display = "block";

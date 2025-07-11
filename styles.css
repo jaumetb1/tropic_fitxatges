@@ -470,8 +470,6 @@ padding-left: 5px;padding-right: 5px;
   background-color:#eae6e6;
 }
 #modalSessio{display:none;}
-
-
 #alarma-entrada,#alarma-sortida{
   position:absolute;
   display:flex;
