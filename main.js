@@ -19,7 +19,7 @@ function inicialitzarTaulerDebug() {
   tauler.style.position = "fixed";
   tauler.style.bottom = "40px";
   tauler.style.left = "0";
-  tauler.style.width = "100%";
+  tauler.style.width = "30%";
   tauler.style.maxHeight = "200px";
   tauler.style.overflowY = "auto";
   tauler.style.background = "#111";
@@ -65,6 +65,7 @@ function detectarDispositiu() {
 // 🌐 Navegador
 function detectarNavegador() {
   const ua = navigator.userAgent;
+
   if (ua.includes("Chrome")) return "🌐 Chrome";
   if (ua.includes("Firefox")) return "🦊 Firefox";
   if (ua.includes("Safari") && !ua.includes("Chrome")) return "🍎 Safari";
@@ -78,7 +79,7 @@ function comprovarCompatibilitatSupabase() {
 }
 function detectarSistemaOperatiu() {
   const ua = navigator.userAgent;
-
+if(ua)return navigator.userAgent;
   if (ua.includes("Windows")) return "🪟 Windows";
   if (ua.includes("Macintosh")) return "🍎 macOS";
   if (ua.includes("Linux")) return "🐧 Linux";
@@ -94,16 +95,20 @@ async function testSupabaseSessio() {
     if (error) {
       console.error("❌ Error al recuperar sessió:", error.message);
       afegirDebugVisual("❌ Error al recuperar sessió: " + error.message);
+      afegirLiniaTauler("❌ Error al recuperar sessió: " + error.message);
     } else if (session) {
       console.log("✅ Sessió activa detectada:", session.user.email);
       afegirDebugVisual("✅ Sessió activa: " + session.user.email);
+        afegirLiniaTauler("✅ Sessió activa: " + session.user.email);
     } else {
       console.warn("🚫 No hi ha sessió activa.");
       afegirDebugVisual("⚠️ Supabase accessible, però no hi ha sessió iniciada.");
+           afegirLiniaTauler("⚠️ Supabase accessible, però no hi ha sessió iniciada.");
     }
   } catch (e) {
     console.error("🧨 Error general en el test:", e);
     afegirDebugVisual("❌ Error inesperat. Mira la consola.");
+    afegirLiniaTauler("❌ Error inesperat. Mira la consola.");
   }
 }
 
@@ -678,6 +683,7 @@ async function fitxar(event, nom, tipus, dataStr) {
     fitxatges=await carregaFitxatges();
     const avui = new Date().toISOString().split("T")[0];
     actualitzarPanell(avui);
+    afegirLiniaTauler(`Fixatge enregistrat ${tipus} per ${nom}`);
   }
 }
 
@@ -2929,7 +2935,7 @@ function iniciarContadorSessio() {
 
   intervalSessio = setInterval(() => {
     segonsRestants--;
-
+if(segonsRestants===0)afegirLiniaTauler("Sessió caducada: Cal tornar enviar les credencials");
     if (segonsRestants <= 0) {
       document.getElementById("loginScreen").style.visibility="visible";
 
