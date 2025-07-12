@@ -156,6 +156,7 @@ color:white;}
    border-radius: 10px;
    
 }
+#feedback-info textarea{font-size: 22px !important;}
 /* Estilo para eventos */
 .fc-event {
   border-radius: 5px; /* Bordes redondeados */

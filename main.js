@@ -32,9 +32,10 @@ function inicialitzarTaulerDebug() {
 }
 
 // ➕ Afegeix línia visual al tauler
-function afegirLiniaTauler(missatge) {
+function afegirLiniaTauler(missatge,color="white") {
   const tauler = document.getElementById("taulerDebug");
   const div = document.createElement("div");
+  div.style.color=color;
   div.textContent = "› " + missatge;
   tauler.appendChild(div);
   tauler.scrollTop = tauler.scrollHeight;
@@ -65,11 +66,11 @@ function detectarDispositiu() {
 // 🌐 Navegador
 function detectarNavegador() {
   const ua = navigator.userAgent;
-
+if (ua.includes("Edg")) return "🔷 Edge";
   if (ua.includes("Chrome")) return "🌐 Chrome";
   if (ua.includes("Firefox")) return "🦊 Firefox";
   if (ua.includes("Safari") && !ua.includes("Chrome")) return "🍎 Safari";
-  if (ua.includes("Edge")) return "🔷 Edge";
+  
   return "❓ Navegador desconegut";
 }
 
@@ -87,6 +88,13 @@ if(ua)return navigator.userAgent;
   if (ua.includes("like Mac")) return "📱 iOS";
   return "❓ Desconegut";
 }
+function detectarTactil() {
+  return navigator.maxTouchPoints > 0 ? "🖐️ Tàctil" : "🖱️ No tàctil";
+}
+function detectarResolucio() {
+  return `${window.screen.width}×${window.screen.height} px`;
+}
+
 async function testSupabaseSessio() {
   
   try {
@@ -95,15 +103,15 @@ async function testSupabaseSessio() {
     if (error) {
       console.error("❌ Error al recuperar sessió:", error.message);
       afegirDebugVisual("❌ Error al recuperar sessió: " + error.message);
-      afegirLiniaTauler("❌ Error al recuperar sessió: " + error.message);
+      afegirLiniaTauler("❌ Error al recuperar sessió: " + error.message,"red");
     } else if (session) {
       console.log("✅ Sessió activa detectada:", session.user.email);
       afegirDebugVisual("✅ Sessió activa: " + session.user.email);
-        afegirLiniaTauler("✅ Sessió activa: " + session.user.email);
+        afegirLiniaTauler("✅ Sessió activa: " + session.user.email,"green");
     } else {
       console.warn("🚫 No hi ha sessió activa.");
       afegirDebugVisual("⚠️ Supabase accessible, però no hi ha sessió iniciada.");
-           afegirLiniaTauler("⚠️ Supabase accessible, però no hi ha sessió iniciada.");
+           afegirLiniaTauler("⚠️ Supabase accessible, però no hi ha sessió iniciada.","yellow");
     }
   } catch (e) {
     console.error("🧨 Error general en el test:", e);
@@ -1326,7 +1334,7 @@ function gestionarSessioSupabase() {
 
 document.addEventListener("DOMContentLoaded", async () => {
 inicialitzarTaulerDebug();
-
+afegirLiniaTauler("✅ Inicialitzant el DOM");
   afegirLiniaTauler("🖥️ Dispositiu: " + detectarDispositiu());
   afegirLiniaTauler("🌐 Navegador: " + detectarNavegador());
 
@@ -1336,7 +1344,8 @@ inicialitzarTaulerDebug();
     afegirLiniaTauler("❌ No compatible amb Supabase — mode limitat recomanat");
   }
 afegirLiniaTauler("🧬 Sistema operatiu: " + detectarSistemaOperatiu());
-
+afegirLiniaTauler("🖐️ Tactil: " + detectarTactil());
+afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
   // 🧩 Vincular botó a toggleTauler
   document.getElementById("btnToggleTauler").addEventListener("click", toggleTauler);
   document
@@ -1375,10 +1384,10 @@ afegirLiniaTauler("🧬 Sistema operatiu: " + detectarSistemaOperatiu());
     navigator.serviceWorker
       .register("./sw.js")
       .then(() => {
-        //console.log("✔️ Service Worker registrat correctament");
+        afegirLiniaTauler("✔️ Service Worker registrat correctament");
       })
       .catch((error) => {
-        console.error("❌ Error registrant el Service Worker:", error);
+        afegirLiniaTauler("❌ Error registrant el Service Worker:", error);
       });
   }
   const calendarEl = document.getElementById("calendar");
@@ -2414,7 +2423,7 @@ async function iniciarSessio() {
     errorMsg.style.display = "block";
   } else {
     // Accés concedit!
-    console.log("🔐 Funció iniciarSessio comensada");
+    afegirLiniaTauler("🔐 Funció iniciarSessio comensada");
     document.getElementById("loginScreen").style.visibility = "hidden";
     const sessio = await supabase.auth.getSession();
     const email = sessio.data.session?.user.email || "—";
@@ -2588,7 +2597,7 @@ function updateClock() {
     "clock"
   ).textContent = `${hours}:${minutes}:${seconds}`;
 }
- function contarTreballadors(usuaris) {
+function contarTreballadors(usuaris) {
   return usuaris.filter(u => u.rol === "treballador").length;
 }
   
@@ -2815,6 +2824,7 @@ function mostrar_feedback_info(text, tipus = "info", durada = 3000) {
     case "error":
       feedback.classList.add("text-danger");
       feedback.style.color = "white";
+      feedback.style.fontSize="24px";
       reproducirSonidoValor("fallo-1.mp3");
       break;
 
