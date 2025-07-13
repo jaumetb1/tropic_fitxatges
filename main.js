@@ -1,4 +1,5 @@
 let segonsRestants = 3600; // 60 minuts
+let esMobil=false;
 let intervalSessio;
 function crearSpanHora(text) {
   const span = document.createElement("span");
@@ -133,7 +134,7 @@ async function testSupabaseSessio() {
 }
 
 function afegirDebugVisual(text) {
-  alert(text);
+if(!esMobil){
   const div = document.createElement("div");
   div.style.position = "fixed";
   div.style.bottom = "0";
@@ -144,7 +145,7 @@ function afegirDebugVisual(text) {
   div.style.fontSize = "14px";
   div.style.zIndex = "9999";
   div.textContent = text;
-  document.body.appendChild(div);
+  document.body.appendChild(div);}
 }
 
 function actualitzarNumeroCercle(valor1,valor2) {
@@ -1502,11 +1503,13 @@ afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
   inicialitzarSelectorsInforme();
   testSupabaseSessio();
   gestionarSessioSupabase();
-  const esMobil=detectarDispositiuMobil();
+  esMobil=detectarDispositiuMobil();
   afegirLiniaTauler("Es Mobil : " + esMobil);
   if(esMobil){
 document.getElementById("panellEsquerra").style.display="none";
 document.getElementById("ver-botones").style.display="none";
+document.getElementById("taulerDebug").style.display="none";
+
   }
 });
 
