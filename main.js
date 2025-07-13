@@ -1511,7 +1511,8 @@ afegirLiniaTauler("Mode Incognit"+ detectarIncognit());
   testSupabaseSessio();
   gestionarSessioSupabase();
   const esMobil=detectarDispositiuMobil();
-  if(esMobil===true){
+  afegirLiniaTauler("Es Mobil : "+esMobil);
+  if(esMobil){
 document.getElementById("panellEsquerra").style.display="none";
 document.getElementById("ver-botones").style.display="none";
   }
