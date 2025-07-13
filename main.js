@@ -62,7 +62,15 @@ function detectarDispositiu() {
   if (/Windows|Macintosh|Linux/i.test(ua)) return "🖥️ PC o portàtil";
   return "❓ Tipus desconegut";
 }
+// 🔍 Dispositiu
+function detectarDispositiuMobil() {
+  const ua = navigator.userAgent;
 
+  if (/Tablet|iPad/i.test(ua)) return false;
+  if (/Mobile|Android|iPhone|iPod/i.test(ua)) return true;
+  if (/Windows|Macintosh|Linux/i.test(ua)) return false;
+  return false;
+}
 // 🌐 Navegador
 function detectarNavegador() {
   const ua = navigator.userAgent;
@@ -92,7 +100,19 @@ function detectarTactil() {
   return navigator.maxTouchPoints > 0 ? "🖐️ Tàctil" : "🖱️ No tàctil";
 }
 function detectarResolucio() {
-  return `${window.screen.width}×${window.screen.height} px`;
+  const width=window.screen.width;
+  const height=window.screen.height;
+  const position=width>height?"Horitzontal":"Verical";
+  return `${window.screen.width}×${window.screen.height} px ${position}`;
+}
+function detectarIncognit() {
+  const fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+  if (!fs) return "❓ No es pot detectar";
+  fs(window.TEMPORARY, 100, () => {
+    afegirLiniaTauler("🧭 Mode normal");
+  }, () => {
+    afegirLiniaTauler("🕵️ Mode incògnit detectat");
+  });
 }
 
 async function testSupabaseSessio() {
@@ -1346,6 +1366,7 @@ afegirLiniaTauler("✅ Inicialitzant el DOM");
 afegirLiniaTauler("🧬 Sistema operatiu: " + detectarSistemaOperatiu());
 afegirLiniaTauler("🖐️ Tactil: " + detectarTactil());
 afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
+afegirLiniaTauler("Mode Incognit"+ detectarIncognit());
   // 🧩 Vincular botó a toggleTauler
   document.getElementById("btnToggleTauler").addEventListener("click", toggleTauler);
   document
@@ -1489,6 +1510,11 @@ afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
   inicialitzarSelectorsInforme();
   testSupabaseSessio();
   gestionarSessioSupabase();
+  const esMobil=detectarDispositiuMobil();
+  if(esMobil===true){
+document.getElementById("panellEsquerra").style.display="none";
+document.getElementById("ver-botones").style.display="none";
+  }
 });
 
 async function mostrarInformePersonalitzat(mesIndex, any) {
@@ -2400,12 +2426,7 @@ document
 
   
   });
-// ✅ Recomanat
-window.addEventListener("beforeunload", function (e) {
-  e.preventDefault();
- 
-  e.returnValue = ""; // Encara cal per mostrar el diàleg en alguns navegadors
-});
+
 
 async function iniciarSessio() {
  // console.log("🔐 Funció iniciarSessio comensada");
@@ -2967,3 +2988,10 @@ function mostrarModalSessio() {
   modal.style.display = "block";
 }
 
+
+// ✅ Recomanat
+window.addEventListener("beforeunload", function (e) {
+  e.preventDefault();
+
+  e.returnValue = ""; // Encara cal per mostrar el diàleg en alguns navegadors
+});
