@@ -105,15 +105,7 @@ function detectarResolucio() {
   const position=width>height?"Horitzontal":"Verical";
   return `${window.screen.width}×${window.screen.height} px ${position}`;
 }
-function detectarIncognit() {
-  const fs = window.RequestFileSystem || window.webkitRequestFileSystem;
-  if (!fs) return "❓ No es pot detectar";
-  fs(window.TEMPORARY, 100, () => {
-    afegirLiniaTauler("🧭 Mode normal");
-  }, () => {
-    afegirLiniaTauler("🕵️ Mode incògnit detectat");
-  });
-}
+
 
 async function testSupabaseSessio() {
   
@@ -1366,7 +1358,7 @@ afegirLiniaTauler("✅ Inicialitzant el DOM");
 afegirLiniaTauler("🧬 Sistema operatiu: " + detectarSistemaOperatiu());
 afegirLiniaTauler("🖐️ Tactil: " + detectarTactil());
 afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
-afegirLiniaTauler("Mode Incognit"+ detectarIncognit());
+
   // 🧩 Vincular botó a toggleTauler
   document.getElementById("btnToggleTauler").addEventListener("click", toggleTauler);
   document
