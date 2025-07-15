@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tropic-cache-v3.2';
+const CACHE_NAME = 'tropic-cache-v3.3';
 const FILES_TO_CACHE = [
   '/tropic_fitxatges/index.html',
   '/tropic_fitxatges/manifest.json',
