@@ -3,13 +3,73 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+async function getTempsCaducitatToken(supabase) {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) return null;
+
+    const payload = JSON.parse(atob(session.access_token.split(".")[1]));
+    const expiryTimestamp = payload.exp * 1000; // en mil·lisegons
+    const tempsRestant = expiryTimestamp - Date.now();
+
+    return Math.floor(tempsRestant / 1000); // Retorna en segons
+  } catch (err) {
+    console.error("❌ Error obtenint caducitat del token:", err);
+    return null;
+  }
+}
+
+async function iniciarCompteEnrereToken(supabase) {
+  const resposta = await supabase.auth.getSession();
+  const token = resposta?.data?.session?.access_token;
+  if (!token) return;
+
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  const tempsFinal = payload.exp * 1000; // timestamp en mil·lisegons
+
+  const span = document.getElementById("segonsRestants");
+  const barra = document.getElementById("barraToken");
+
+  function actualitzarBarra() {
+    const tempsRestant = tempsFinal - Date.now();
+    const segons = Math.floor(tempsRestant / 1000);
+    span.textContent = segons > 0 ? formatTemps(segons) : "Caducat";
+
+    // Percentatge visual
+    const totalDurada = tempsFinal - payload.iat * 1000;
+    const percentatge = Math.max(0, Math.floor((tempsRestant / totalDurada) * 100));
+    barra.style.width = percentatge + "%";
+    barra.style.background = percentatge > 30 ? "#4caf50" : "#ff9800";
+
+    if (segons <= 0) {
+      barra.style.background = "#f44336";
+      clearInterval(timer);
+    }
+  }
+
+  actualitzarBarra();
+  const timer = setInterval(actualitzarBarra, 1000);
+}
+
+function formatTemps(segonsTotals) {
+  const minutes = Math.floor(segonsTotals / 60);
+  const seconds = segonsTotals % 60;
+
+  // Afegeix zero davant si cal
+  const m = minutes.toString().padStart(2, "0");
+  const s = seconds.toString().padStart(2, "0");
+
+  return `${m}:${s}`;
+}
+let segonsRestants = 3600;
+console.log("🕒 El token caduca en", segonsRestants, "segons");
 //if (supabase) {supabase.from("fitxatges").select().limit(1).then(({ data, error }) => {
  //     if (error) {
  //       console.error("❌ Supabase connectat, però la consulta ha fallat:",error.message);
  //     } else {console.log("✅ Connexió OK");}
  //   });
 //}
-let segonsRestants = 3600; // 60 minuts
+
 let esMobil=false;
 let intervalSessio;
 function crearSpanHora(text) {
@@ -1290,7 +1350,7 @@ document.querySelector(".btn-danger").addEventListener("click", () => {
 });
 // 🚀 Inicialització de l’aplicació
 function inicialitzarApp(session) {
-  afegirLiniaTauler("🔧 Inicialitzant per:", session.user.email);
+  afegirLiniaTauler("🔧 Inicialitzant per:"+ session.user.email);
   // accions personalitzades...
 }
 //console.log("📦 El fitxer main.js s’ha carregat");
@@ -1303,6 +1363,7 @@ async function comprovarSessioInicial() {
   } else {
     console.log("✅ Sessió detectada");
     iniciarSessio();
+   
     document.getElementById("card-reader").style.background="#33bb33";
     //inicialitzarApp(session);
   }
@@ -1371,7 +1432,7 @@ afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
  const { data, error } = await supabase.from("fitxatges").select().limit(1);
 
   if (error) {
-    afegirLiniaTauler("❌ Error en la consulta:", error.message);
+    afegirLiniaTauler("❌ Error en la consulta:"+ error.message);
   } else {
     afegirLiniaTauler("✅ Connexió Supabase OK");
   }
@@ -1381,6 +1442,7 @@ afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
   } catch (err) {
     afegirLiniaTauler("⚠️ Error en test JS");
   }
+
 
   // Hora local del TPV
   afegirLiniaTauler("🕒 Hora local: " + new Date().toLocaleString());
@@ -1425,7 +1487,7 @@ afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
         afegirLiniaTauler("✔️ Service Worker registrat correctament");
       })
       .catch((error) => {
-        afegirLiniaTauler("❌ Error registrant el Service Worker:", error);
+        afegirLiniaTauler("❌ Error registrant el Service Worker:"+ error);
       });
   }
   const calendarEl = document.getElementById("calendar");
@@ -2468,7 +2530,7 @@ async function iniciarSessio() {
     document.getElementById("loginScreen").style.visibility = "hidden";
     const sessio = await supabase.auth.getSession();
     const email = sessio.data.session?.user.email || "—";
-    
+    iniciarCompteEnrereToken(supabase);
    console.log(sessio);
    // console.log(email);
     document.getElementById(
