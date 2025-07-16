@@ -1,22 +1,14 @@
 import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-if (supabase) {
-  supabase
-    .from("fitxatges")
-    .select()
-    .limit(1)
-    .then(({ data, error }) => {
-      if (error) {
-        console.error(
-          "❌ Supabase connectat, però la consulta ha fallat:",
-          error.message
-        );
-      } else {
-       // console.log("✅ Connexió OK");
-      }
-    });
-}
+
+//if (supabase) {supabase.from("fitxatges").select().limit(1).then(({ data, error }) => {
+ //     if (error) {
+ //       console.error("❌ Supabase connectat, però la consulta ha fallat:",error.message);
+ //     } else {console.log("✅ Connexió OK");}
+ //   });
+//}
 let segonsRestants = 3600; // 60 minuts
 let esMobil=false;
 let intervalSessio;
@@ -1301,7 +1293,7 @@ document.querySelector(".btn-danger").addEventListener("click", () => {
 });
 // 🚀 Inicialització de l’aplicació
 function inicialitzarApp(session) {
-  console.log("🔧 Inicialitzant per:", session.user.email);
+  afegirLiniaTauler("🔧 Inicialitzant per:", session.user.email);
   // accions personalitzades...
 }
 //console.log("📦 El fitxer main.js s’ha carregat");
@@ -1310,10 +1302,11 @@ async function comprovarSessioInicial() {
 
   if (!session || error) {
     console.warn("🔐 No hi ha sessió activa");
-    mostrarPantallaLogin();
+    //mostrarPantallaLogin();
   } else {
     console.log("✅ Sessió detectada");
     iniciarSessio();
+    document.getElementById("card-reader").style.background="green";
     //inicialitzarApp(session);
   }
 }
@@ -1322,19 +1315,22 @@ function gestionarSessioSupabase() {
   supabase.auth.onAuthStateChange((event, session) => {
     switch (event) {
       case "SIGNED_IN":
-        console.log("🔓 Sessió iniciada");
-       
+        afegirLiniaTauler("🔓 Sessió iniciada");
+         
         inicialitzarApp(session);
         break;
 
       case "TOKEN_REFRESHED":
-        console.log("🔄 Token renovat en segon pla");
+        afegirLiniaTauler("🔄 Token renovat en segon pla");
         inicialitzarApp(session);
+         
         break;
 
       case "SIGNED_OUT":
-        console.warn("🔒 Sessió caducada o tancada");
-        mostrarModalSessio(); // modal informatiu
+        afegirLiniaTauler("🔒 Sessió caducada o tancada");
+        //mostrarModalSessio(); // modal informatiu
+     
+     
         document.getElementById("botoSessio").textContent = "Cal reiniciar";
         document.getElementById("botoSessio").disabled = false;
         break;
@@ -1349,7 +1345,7 @@ function gestionarSessioSupabase() {
 
 document.addEventListener("DOMContentLoaded", async () => {
 inicialitzarTaulerDebug();
-playSound();
+
 afegirLiniaTauler("✅ Inicialitzant el DOM");
   afegirLiniaTauler("🖥️ Dispositiu: " + detectarDispositiu());
   afegirLiniaTauler("🌐 Navegador: " + detectarNavegador());
@@ -1373,7 +1369,13 @@ afegirLiniaTauler("🖼️ Resolució: " + detectarResolucio());
   } else {
     afegirLiniaTauler(" → ❌ No compatible");
   }
+ const { data, error } = await supabase.from("fitxatges").select().limit(1);
 
+  if (error) {
+    afegirLiniaTauler("❌ Error en la consulta:", error.message);
+  } else {
+    afegirLiniaTauler("✅ Connexió Supabase OK");
+  }
   // Comprovació JS bàsic
   try {
     afegirLiniaTauler("🧪 Test JS: " + (typeof Promise !== "undefined" ? "✅ Promise disponible" : "❌ No disponible"));
@@ -2474,6 +2476,7 @@ async function iniciarSessio() {
       "usuariActiu"
     ).innerHTML = `👤 <strong>${email}</strong>`;
    segonsRestants=3600;
+
    iniciarContadorSessio();
    
     document.getElementById("activar-conexion").click();
@@ -2567,7 +2570,7 @@ function reproducirSonidoValor(valor) {
 
   audio.play();
 }
-function playSound() {
+async function playSound() {
   //console.log("Reproduint so : reminder.mp3");
   let audio = new Audio("./sounds/whatsapp-apple.mp3"); // Substitueix amb la teva ruta del fitxer d'àudio
 
