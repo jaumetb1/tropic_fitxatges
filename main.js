@@ -2,6 +2,87 @@ import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+let timerToken = null;
+let dataImpresio=null;
+function imprimirContingutHTML(html) {
+  const finestra = window.open("", "_blank", "width=600,height=600");
+  if (!finestra) {
+    alert("❌ No s'ha pogut obrir la finestra d'impressió");
+    return;
+  }
+
+  finestra.document.title = "Tiquet";
+  finestra.document.body.innerHTML = `
+    <html>
+      <head>
+        <style>
+          body { font-family: monospace; padding: 10px;}
+          h3 { margin-bottom: 0.5em; }
+          hr { margin: 1em 0; }
+          
+        </style>
+      </head>
+      <body>${html}</body>
+    </html>
+  `;
+
+  finestra.document.close();
+  finestra.focus();
+  finestra.print();
+}
+
+async function imprimirFitxatges() {
+
+   // 🔁 Substitueix amb el teu ID real
+
+  const avui = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD
+   const dataConsulta = dataImpresio || avui; // Si no hi ha dataImpresio, usa avui
+  const { data, error } = await supabase
+    .from("fitxatges")
+    .select("nom, data, hora, tipus")
+    .eq("data", dataConsulta)
+    .eq("id_empresa", ID_EMPRESA)
+    .order("hora", { ascending: true });
+
+  if (error) {
+    console.error("❌ Error obtenint fitxatges:", error.message);
+    return;
+  }
+
+  // Agrupar per nom
+  const agrupats = {};
+  data.forEach((f) => {
+    if (!agrupats[f.nom]) agrupats[f.nom] = {};
+    agrupats[f.nom][f.tipus] = f.hora;
+  });
+
+  // Generar HTML del tiquet
+  let html = `<h3>🧾 Fitxatges del dia</h3>`;
+  html += `<p>📅 Data: ${dataConsulta}</p><hr>`;
+
+  Object.keys(agrupats).forEach((nom) => {
+    const entrada = agrupats[nom].entrada || "—";
+    const sortida = agrupats[nom].sortida || "—";
+    html += `
+      <p><strong>👤 ${nom}</strong></p>
+      <p>Entrada: ${formatHora(entrada)}</p>
+      <p>Sortida: ${formatHora(sortida)}</p>
+      <hr>
+    `;
+  });
+
+  imprimirContingutHTML(html);
+}
+
+function formatHora(horaString) {
+  if (!horaString || horaString === "—") return "—";
+  const [h, m] = horaString.split(":");
+  return `${h.padStart(2, "0")}:${m.padStart(2, "0")}`;
+}
+
+
+
+document.getElementById("btnImprimir").addEventListener("click", imprimirFitxatges);
 
 async function getTempsCaducitatToken(supabase) {
   try {
@@ -20,12 +101,14 @@ async function getTempsCaducitatToken(supabase) {
 }
 
 async function iniciarCompteEnrereToken(supabase) {
+  if (timerToken) clearInterval(timerToken); // Evita duplicats
+
   const resposta = await supabase.auth.getSession();
   const token = resposta?.data?.session?.access_token;
   if (!token) return;
 
   const payload = JSON.parse(atob(token.split(".")[1]));
-  const tempsFinal = payload.exp * 1000; // timestamp en mil·lisegons
+  const tempsFinal = payload.exp * 1000;
 
   const span = document.getElementById("segonsRestants");
   const barra = document.getElementById("barraToken");
@@ -35,7 +118,6 @@ async function iniciarCompteEnrereToken(supabase) {
     const segons = Math.floor(tempsRestant / 1000);
     span.textContent = segons > 0 ? formatTemps(segons) : "Caducat";
 
-    // Percentatge visual
     const totalDurada = tempsFinal - payload.iat * 1000;
     const percentatge = Math.max(0, Math.floor((tempsRestant / totalDurada) * 100));
     barra.style.width = percentatge + "%";
@@ -43,13 +125,14 @@ async function iniciarCompteEnrereToken(supabase) {
 
     if (segons <= 0) {
       barra.style.background = "#f44336";
-      clearInterval(timer);
+      clearInterval(timerToken);
     }
   }
 
   actualitzarBarra();
-  const timer = setInterval(actualitzarBarra, 1000);
+  timerToken = setInterval(actualitzarBarra, 1000);
 }
+
 
 function formatTemps(segonsTotals) {
   const minutes = Math.floor(segonsTotals / 60);
@@ -469,10 +552,11 @@ async function registrarSortidaTemporal(nom, dataStr) {
 const temporizadoresActivos = new Map();
 
 async function actualitzarPanell(dataStr) {
+
   if (!ID_EMPRESA) return;
   //console.log("DataSTR:", dataStr);
   fitxatges = await carregaFitxatges();
-
+dataImpresio=dataStr;
   const dataActual = new Date().toISOString().slice(0, 10);
   const esDataActual = dataStr === dataActual;
   const dataIso = convertirDataAISOguio(dataStr);
@@ -1381,6 +1465,7 @@ function gestionarSessioSupabase() {
 
       case "TOKEN_REFRESHED":
         afegirLiniaTauler("🔄 Token renovat en segon pla");
+       iniciarCompteEnrereToken(supabase); // 🔁 Reinicia la barra
         inicialitzarApp(session);
          
         break;
